@@ -36,11 +36,7 @@ export default function HomeScreen() {
         <View>
           <View className="flex flex-row items-center justify-between w-full">
             <View className="flex flex-col ">
-              <ThemedText
-                className="leading-none "
-                style={{ fontSize: scaledFontSize.xl }}
-                type="mBold"
-              >
+              <ThemedText className="text-2xl leading-none" type="mBold">
                 Hello, {name}!
               </ThemedText>
               <ThemedText className="text-sm text-[#BDCACA]">
