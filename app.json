@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "NexademyV2MOBILE",
-    "slug": "NexademyV2MOBILE",
+    "slug": "nexademy",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -15,7 +15,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.nexthrivestudios.nexademy"
     },
     "web": {
       "bundler": "metro",
@@ -37,6 +38,15 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "ae023349-a36f-4bee-95c8-b827b5d1570a"
+      }
+    },
+    "owner": "nexthrivestudios"
   }
 }

@@ -10,14 +10,12 @@ import {
 } from "react-native";
 import { Shadow } from "react-native-shadow-2";
 import { Feather } from "@expo/vector-icons"; // Import Expo Icons
-import { scaledFontSize } from "../../components/scaleHelper";
 
-import { HelloWave } from "@/components/HelloWave";
-import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { ScaledSheet, ms, s, vs, mvs } from "react-native-size-matters";
 
 export default function HomeScreen() {
   const handleLogout = async () => {
@@ -32,34 +30,41 @@ export default function HomeScreen() {
     >
       {/* <Button title="Logout" onPress={handleLogout} /> */}
 
-      <ThemedView className="px-6 mt-16" style={styles.titleContainer}>
+      <ThemedView style={styles.titleContainer}>
         <View>
           <View className="flex flex-row items-center justify-between w-full">
             <View className="flex flex-col ">
-              <ThemedText className="text-2xl leading-none" type="mBold">
+              <ThemedText
+                className=""
+                style={{ fontSize: ms(24), lineHeight: ms(30) }}
+                type="mBold"
+              >
                 Hello, {name}!
               </ThemedText>
-              <ThemedText className="text-sm text-[#BDCACA]">
+              <ThemedText
+                className=" text-[#BDCACA]"
+                style={{ fontSize: ms(14) }}
+              >
                 what should we do today?
               </ThemedText>
             </View>
             <Shadow
-              offset={[0, 4]}
-              distance={10}
+              offset={[0, ms(4)]}
+              distance={ms(10)}
               startColor="rgba(213, 226, 226, 0.25)"
               containerStyle={{
-                width: 72,
-                height: 72,
-                borderRadius: 36,
+                width: ms(72),
+                height: ms(72),
+                borderRadius: ms(36),
                 overflow: "visible",
               }}
             >
               <View
                 style={{
-                  width: 72,
-                  height: 72,
-                  borderRadius: 36,
-                  borderWidth: 8,
+                  width: ms(72),
+                  height: ms(72),
+                  borderRadius: ms(36),
+                  borderWidth: ms(8),
                   borderColor: "#FFFFFF",
                   alignItems: "center",
                   justifyContent: "center",
@@ -68,65 +73,109 @@ export default function HomeScreen() {
                 <Image
                   source={require("../../assets/images/face.jpg")}
                   style={{
-                    width: 56,
-                    height: 56,
-                    borderRadius: 28,
+                    width: ms(56),
+                    height: mvs(56),
+                    borderRadius: ms(28),
                   }}
                 />
               </View>
             </Shadow>
           </View>
           <Shadow
-            offset={[0, 4]}
-            distance={10}
+            offset={[0, ms(4)]}
+            distance={ms(10)}
             startColor="rgba(213, 226, 226, 0.15)"
             containerStyle={{
               width: "100%",
-              borderRadius: 16,
+              borderRadius: ms(16),
             }}
           >
             <View className="w-full p-5 mt-5 bg-white rounded">
-              <View className="flex flex-row items-center justify-between gap-20 mb-2 ">
-                <ThemedText className="text-xl" type="mBold">
+              <View
+                className="flex flex-row items-center justify-between"
+                style={{
+                  rowGap: ms(20),
+                  columnGap: ms(20),
+                  marginBottom: ms(2),
+                }}
+              >
+                <ThemedText
+                  className=""
+                  type="mBold"
+                  style={{ fontSize: ms(24) }}
+                >
                   Announcement
                 </ThemedText>
-                <Feather name="chevron-right" size={20} color="#000" />
+                <Feather name="chevron-right" size={ms(20)} color="#000" />
               </View>
-              <View className="flex flex-col gap-2">
-                <View className="bg-[#55828b] rounded flex flex-row items-center p-5 justify-between">
-                  <Image
-                    source={require("../../assets/images/Ellipse 1.png")}
-                  />
-                  <View>
-                    <ThemedText className="text-[#EBE2E2] text-xs ">
-                      School
-                    </ThemedText>
-                    <ThemedText className="text-sm text-white " type="pMedium">
-                      Field Trip necessities...
-                    </ThemedText>
-                  </View>
-                  <View className="flex flex-row items-center justify-between gap-3">
-                    <ThemedText
-                      className="text-[#D5D5D5] text-xs"
-                      type="pMedium"
-                    >
-                      12/10/24
-                    </ThemedText>
-                    <Feather name="chevron-right" size={15} color="#476C74" />
-                  </View>
-                </View>
-                <View className="bg-[#55638B] rounded flex flex-row items-center p-5 justify-between">
+              <View className="flex flex-col " style={{ gap: ms(8) }}>
+                <View
+                  className="bg-[#55828b] rounded flex flex-row justify-center items-center "
+                  style={{
+                    paddingBlock: ms(14),
+                    paddingInline: ms(22),
+                    gap: ms(10),
+                  }}
+                >
                   <View className="flex flex-row gap-4">
                     <Image
                       source={require("../../assets/images/Ellipse 1.png")}
                     />
-                    <View className="">
-                      <ThemedText className="text-[#EBE2E2] text-xs ">
+                    <View style={{ marginRight: ms(20) }}>
+                      <ThemedText
+                        className="text-[#EBE2E2]  "
+                        style={{ fontSize: ms(8) }}
+                      >
+                        School
+                      </ThemedText>
+                      <ThemedText
+                        className="text-white "
+                        type="pMedium"
+                        style={{ fontSize: ms(10) }}
+                      >
+                        Field Trip necessities...
+                      </ThemedText>
+                    </View>
+                  </View>
+
+                  <View className="flex flex-row items-center justify-between gap-3">
+                    <ThemedText
+                      className="text-[#D5D5D5] "
+                      type="pMedium"
+                      style={{ fontSize: ms(10) }}
+                    >
+                      12/10/24
+                    </ThemedText>
+                    <Feather
+                      name="chevron-right"
+                      size={ms(15)}
+                      color="#476C74"
+                    />
+                  </View>
+                </View>
+                <View
+                  className="bg-[#55638B] rounded flex flex-row justify-between items-center "
+                  style={{
+                    paddingBlock: ms(14),
+                    paddingInline: ms(22),
+                    gap: ms(10),
+                  }}
+                >
+                  <View className="flex flex-row gap-4">
+                    <Image
+                      source={require("../../assets/images/Ellipse 1.png")}
+                    />
+                    <View style={{ marginRight: ms(20) }}>
+                      <ThemedText
+                        className="text-[#EBE2E2]  "
+                        style={{ fontSize: ms(8) }}
+                      >
                         Homeroom
                       </ThemedText>
                       <ThemedText
-                        className="text-sm text-white "
+                        className="text-white "
                         type="pMedium"
+                        style={{ fontSize: ms(10) }}
                       >
                         Please submit your r...
                       </ThemedText>
@@ -134,64 +183,100 @@ export default function HomeScreen() {
                   </View>
                   <View className="flex flex-row items-center justify-between gap-3">
                     <ThemedText
-                      className="text-[#D5D5D5] text-xs"
+                      className="text-[#D5D5D5] "
                       type="pMedium"
+                      style={{ fontSize: ms(10) }}
                     >
-                      10/10/24
+                      12/10/24
                     </ThemedText>
-                    <Feather name="chevron-right" size={15} color="#465275" />
+                    <Feather
+                      name="chevron-right"
+                      size={ms(15)}
+                      color="#465275"
+                    />
                   </View>
                 </View>
-                <View className="bg-[#8B5555] rounded flex flex-row items-center p-5 justify-between">
-                  <View className="flex flex-row gap-4">
-                    <Image
-                      source={require("../../assets/images/Ellipse 1.png")}
-                    />
-                    <View className="">
-                      <ThemedText className="text-[#EBE2E2] text-xs ">
-                        Student Council
-                      </ThemedText>
-                      <ThemedText
-                        className="text-sm text-white "
-                        type="pMedium"
-                      >
-                        Class meet H-4
-                      </ThemedText>
+                <View
+                  className="bg-[#8B5555] rounded flex flex-row items-center "
+                  style={{
+                    paddingBlock: ms(14),
+                    paddingInline: ms(22),
+                    gap: ms(10),
+                  }}
+                >
+                  <View className="flex flex-row justify-between w-full">
+                    <View className="flex flex-row gap-4">
+                      <Image
+                        source={require("../../assets/images/Ellipse 1.png")}
+                      />
+                      <View style={{ marginRight: ms(20) }}>
+                        <ThemedText
+                          className="text-[#EBE2E2]  "
+                          style={{ fontSize: ms(8) }}
+                        >
+                          Student Council
+                        </ThemedText>
+                        <ThemedText
+                          className="text-white "
+                          type="pMedium"
+                          style={{ fontSize: ms(10) }}
+                        >
+                          Class meet H-4
+                        </ThemedText>
+                      </View>
                     </View>
-                  </View>
-                  <View className="flex flex-row items-center justify-between gap-3">
-                    <ThemedText
-                      className="text-[#D5D5D5] text-xs"
-                      type="pMedium"
-                    >
-                      09/10/24
-                    </ThemedText>
-                    <Feather name="chevron-right" size={15} color="#744747" />
+                    <View className="flex flex-row items-center justify-between gap-3">
+                      <ThemedText
+                        className="text-[#D5D5D5] "
+                        type="pMedium"
+                        style={{ fontSize: ms(10) }}
+                      >
+                        09/10/24
+                      </ThemedText>
+                      <Feather
+                        name="chevron-right"
+                        size={ms(15)}
+                        color="#744747"
+                      />
+                    </View>
                   </View>
                 </View>
               </View>
             </View>
           </Shadow>
-          <View className="flex flex-row w-full mt-5">
+          <View
+            className="flex flex-row w-full"
+            style={{ gap: ms(10), marginTop: ms(20) }}
+          >
             {/* Left Column */}
-            <View className="flex flex-col w-[40%] gap-4">
+            <View className="flex flex-col" style={{ gap: ms(14) }}>
               <Shadow
-                offset={[0, 4]}
-                distance={10}
+                offset={[0, ms(4)]}
+                distance={ms(10)}
                 startColor="rgba(213, 226, 226, 0.15)"
                 containerStyle={{
-                  borderRadius: 16,
+                  borderRadius: ms(16),
                 }}
               >
-                <View className="flex items-center justify-center px-5 pt-5 pb-3 bg-white rounded">
+                <View
+                  className="flex items-center justify-center bg-white"
+                  style={{ padding: ms(16), borderRadius: ms(4) }}
+                >
                   <View>
-                    <View className="flex flex-row items-center w-full gap-10 mb-2">
-                      <ThemedText type="mBold" className="text-base">
+                    <View
+                      className="flex flex-row items-center w-full "
+                      style={{ gap: ms(40) }}
+                    >
+                      <ThemedText
+                        type="mBold"
+                        className=""
+                        style={{ fontSize: ms(16) }}
+                      >
                         Tasks
                       </ThemedText>
                       <MaterialCommunityIcons
                         name="book-open-blank-variant"
-                        size={15}
+                        size={ms(12)}
                         color="#55828B"
                       />
                     </View>
@@ -203,7 +288,12 @@ export default function HomeScreen() {
                     </ThemedText>
                     <ThemedText
                       type="pSemiBold"
-                      className="text-black text-[40px] leading-tight "
+                      className="text-black "
+                      style={{
+                        fontSize: ms(40),
+                        lineHeight: ms(46),
+                        height: mvs(30),
+                      }}
                     >
                       241
                     </ThemedText>
@@ -212,22 +302,32 @@ export default function HomeScreen() {
               </Shadow>
 
               <Shadow
-                offset={[0, 4]}
-                distance={10}
+                offset={[0, ms(4)]}
+                distance={ms(10)}
                 startColor="rgba(213, 226, 226, 0.15)"
                 containerStyle={{
-                  borderRadius: 16,
+                  borderRadius: ms(16),
                 }}
               >
-                <View className="flex items-center justify-center px-5 pt-5 pb-3 bg-white rounded">
+                <View
+                  className="flex items-center justify-center bg-white"
+                  style={{ padding: ms(16), borderRadius: ms(4) }}
+                >
                   <View>
-                    <View className="flex flex-row items-center w-full gap-10 mb-2">
-                      <ThemedText type="mBold" className="text-base">
+                    <View
+                      className="flex flex-row items-center w-full "
+                      style={{ gap: ms(40) }}
+                    >
+                      <ThemedText
+                        type="mBold"
+                        className=""
+                        style={{ fontSize: ms(16) }}
+                      >
                         Class
                       </ThemedText>
                       <MaterialCommunityIcons
                         name="book-open-blank-variant"
-                        size={15}
+                        size={ms(12)}
                         color="#55828B"
                       />
                     </View>
@@ -239,11 +339,21 @@ export default function HomeScreen() {
                     </ThemedText>
                     <ThemedText
                       type="pSemiBold"
-                      className="text-black text-[32px] leading-tight "
+                      className="text-black "
+                      style={{
+                        fontSize: ms(32),
+                        lineHeight: ms(38),
+                        height: mvs(30),
+                      }}
                     >
                       OTKP
                     </ThemedText>
-                    <ThemedText className="text-[#C0C0C0] leading-none italic text-sm">
+                    <ThemedText
+                      className="text-[#C0C0C0] italic"
+                      style={{
+                        fontSize: ms(12),
+                      }}
+                    >
                       Class 4B
                     </ThemedText>
                   </View>
@@ -251,35 +361,50 @@ export default function HomeScreen() {
               </Shadow>
 
               <Shadow
-                offset={[0, 4]}
-                distance={10}
+                offset={[0, ms(4)]}
+                distance={ms(10)}
                 startColor="rgba(213, 226, 226, 0.15)"
                 containerStyle={{
-                  borderRadius: 16,
+                  borderRadius: ms(16),
                 }}
               >
-                <View className="flex items-center justify-center px-5 pt-5 pb-3 bg-white rounded">
+                <View
+                  className="flex items-center justify-center bg-white"
+                  style={{ padding: ms(16), borderRadius: ms(4) }}
+                >
                   <View>
-                    <View className="flex flex-row items-center w-full mb-2 gap-7">
-                      <ThemedText type="mBold" className="text-base">
+                    <View
+                      className="flex flex-row items-center w-full "
+                      style={{ gap: ms(26), marginBottom: ms(8) }}
+                    >
+                      <ThemedText
+                        type="mBold"
+                        className=""
+                        style={{ fontSize: ms(16), lineHeight: ms(15) }}
+                      >
                         Attend
                       </ThemedText>
                       <MaterialCommunityIcons
                         name="book-open-blank-variant"
-                        size={15}
+                        size={ms(12)}
                         color="#55828B"
                       />
                     </View>
                     <ThemedText
                       type="pMedium"
-                      className="text-[#CECECE] text-sm"
+                      className="text-[#CECECE] "
+                      style={{ fontSize: ms(12) }}
                     >
                       07:30
                     </ThemedText>
-                    <TouchableOpacity className="bg-[#3B6064] rounded py-3">
+                    <TouchableOpacity
+                      className="bg-[#3B6064] rounded "
+                      style={{ paddingVertical: ms(7) }}
+                    >
                       <ThemedText
                         type="pMedium"
-                        className="text-xs text-center text-white"
+                        className="text-center text-white "
+                        style={{ fontSize: ms(12), height: mvs(15) }}
                       >
                         Present
                       </ThemedText>
@@ -290,40 +415,190 @@ export default function HomeScreen() {
             </View>
 
             {/* Right Column */}
-            <View className="w-[58%]">
+            <View className="">
               <Shadow
                 offset={[0, 4]}
                 distance={10}
                 startColor="rgba(213, 226, 226, 0.15)"
                 containerStyle={{
-                  borderRadius: 16,
+                  borderRadius: ms(16),
                 }}
               >
-                <View className="p-5 bg-white rounded">
-                  <View className="flex flex-row items-center justify-between">
-                    <ThemedText className="text-lg" type="mBold">
+                <View
+                  className="w-full bg-white "
+                  style={{
+                    padding: ms(12),
+                    paddingBottom: ms(15),
+                    borderRadius: ms(4),
+                  }}
+                >
+                  <View
+                    className="flex flex-row items-center justify-between"
+                    style={{ gap: ms(10), marginBottom: ms(10) }}
+                  >
+                    <ThemedText
+                      className=""
+                      type="pBold"
+                      style={{ fontSize: ms(15) }}
+                    >
                       Today's Schedule
                     </ThemedText>
-                    <Feather name="chevron-right" size={20} color="#000" />
+                    <Feather name="chevron-right" size={ms(15)} color="#000" />
                   </View>
-                  <View className="flex flex-col gap-2">
-                    <View className="bg-[#F2F2F2] rounded flex flex-row items-center p-5 justify-between">
-                      <View>
-                        <ThemedText className="text-[#EBE2E2] text-[10px] italic">
-                          Agus Slowhend, S.Bdy.
+                  <View className="flex flex-col " style={{ gap: ms(14) }}>
+                    <View
+                      className="bg-[#F2F2F2] flex flex-row items-center"
+                      style={{
+                        borderRadius: ms(4),
+                        padding: ms(13),
+                        width: ms(160),
+                      }}
+                    >
+                      <View className="" style={{ width: ms(110) }}>
+                        <ThemedText
+                          className="text-[#C0C0C0] font-light  italic"
+                          style={{ fontSize: ms(8) }}
+                        >
+                          Agus Slowhend, S.Bdy.,
                         </ThemedText>
                         <ThemedText
-                          className="text-[#C0C0C0] text-xs "
+                          className="text-[#C0C0C0] "
                           type="pSemiBold"
+                          style={{ fontSize: ms(10), height: mvs(13) }}
                         >
                           Seni Budaya
                         </ThemedText>
                       </View>
                       <ThemedText
-                        className="text-[#C0C0C0] text-xs "
+                        className="text-[#C0C0C0] "
                         type="pSemiBold"
+                        style={{ fontSize: ms(10) }}
                       >
                         07:00
+                      </ThemedText>
+                    </View>
+                    <View
+                      className="bg-[#F2F2F2] flex flex-row items-center"
+                      style={{
+                        borderRadius: ms(4),
+                        padding: ms(13),
+                        width: ms(160),
+                      }}
+                    >
+                      <View className="" style={{ width: ms(110) }}>
+                        <ThemedText
+                          className="text-[#C0C0C0] font-light  italic"
+                          style={{ fontSize: ms(8) }}
+                        >
+                          Teti Majid, Ir. S.Pd.,
+                        </ThemedText>
+                        <ThemedText
+                          className="text-[#C0C0C0] "
+                          type="pSemiBold"
+                          style={{ fontSize: ms(10), height: mvs(13) }}
+                        >
+                          Bahasa Indonesia
+                        </ThemedText>
+                      </View>
+                      <ThemedText
+                        className="text-[#C0C0C0] "
+                        type="pSemiBold"
+                        style={{ fontSize: ms(10) }}
+                      >
+                        10:00
+                      </ThemedText>
+                    </View>
+                    <View
+                      className="bg-[#55828B] flex flex-row items-center"
+                      style={{
+                        borderRadius: ms(4),
+                        padding: ms(13),
+                        width: ms(160),
+                      }}
+                    >
+                      <View className="" style={{ width: ms(110) }}>
+                        <ThemedText
+                          className="text-[#FFFFFF] font-light  italic"
+                          style={{ fontSize: ms(8) }}
+                        >
+                          Miyarti, S.Pd,.
+                        </ThemedText>
+                        <ThemedText
+                          className="text-[#FFFFFF] "
+                          type="pSemiBold"
+                          style={{ fontSize: ms(10), height: mvs(13) }}
+                        >
+                          Matematika
+                        </ThemedText>
+                      </View>
+                      <ThemedText
+                        className="text-[#FFFFFF] "
+                        type="pSemiBold"
+                        style={{ fontSize: ms(10) }}
+                      >
+                        13:00
+                      </ThemedText>
+                    </View>
+                    <View
+                      className="bg-[#F2F2F2] flex flex-row items-center"
+                      style={{
+                        borderRadius: ms(4),
+                        padding: ms(13),
+                        width: ms(160),
+                      }}
+                    >
+                      <View className="" style={{ width: ms(110) }}>
+                        <ThemedText
+                          className="text-[#C0C0C0] font-light  italic"
+                          style={{ fontSize: ms(8) }}
+                        >
+                          Prof. Asep Elmen
+                        </ThemedText>
+                        <ThemedText
+                          className="text-[#C0C0C0] "
+                          type="pSemiBold"
+                          style={{ fontSize: ms(10), height: mvs(13) }}
+                        >
+                          IPA
+                        </ThemedText>
+                      </View>
+                      <ThemedText
+                        className="text-[#C0C0C0] "
+                        type="pSemiBold"
+                        style={{ fontSize: ms(10) }}
+                      >
+                        14:00
+                      </ThemedText>
+                    </View>
+                    <View
+                      className="bg-[#F2F2F2] flex flex-row items-center"
+                      style={{
+                        borderRadius: ms(4),
+                        padding: ms(13),
+                        width: ms(160),
+                      }}
+                    >
+                      <View className="" style={{ width: ms(110) }}>
+                        <ThemedText
+                          className="text-[#C0C0C0] font-light  italic"
+                          style={{ fontSize: ms(8) }}
+                        >
+                          Anton Maulana, S.Kom.,
+                        </ThemedText>
+                        <ThemedText
+                          className="text-[#C0C0C0] "
+                          type="pSemiBold"
+                          style={{ fontSize: ms(10), height: mvs(13) }}
+                        >
+                          TIK
+                        </ThemedText>
+                      </View>
+                      <ThemedText
+                        className="text-[#C0C0C0] "
+                        type="pSemiBold"
+                        style={{ fontSize: ms(10) }}
+                      >
+                        15:00
                       </ThemedText>
                     </View>
                   </View>
@@ -337,21 +612,14 @@ export default function HomeScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = ScaledSheet.create({
   titleContainer: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: "absolute",
+    marginTop: "64@ms",
+    marginBottom: "20@ms",
+
+    gap: "8@ms",
+    paddingHorizontal: "24@ms",
   },
 });

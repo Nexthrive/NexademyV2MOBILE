@@ -1,85 +1,133 @@
-import { Tabs } from "expo-router";
-import React from "react";
-import { Platform, Image } from "react-native";
-import { SvgUri } from "react-native-svg";
-
-import { HapticTab } from "@/components/HapticTab";
-import { IconSymbol } from "@/components/ui/IconSymbol";
-import TabBarBackground from "@/components/ui/TabBarBackground";
+import React, { useRef } from "react";
+import { View, StyleSheet, Animated } from "react-native";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
-import "../../global.css";
-import HomeIcon from "@/assets/icons/Vector.svg";
-import AssignmentIcon from "@/assets/icons/Book.svg";
 import { ThemedText } from "@/components/ThemedText";
+import AssignmentIcon from "@/assets/icons/Book.svg";
+import HomeIcon from "@/assets/icons/Vector.svg";
+import TemplateScreen from "./template";
+import IndexScreen from "./index";
+import ExploreScreen from "./explore";
+import { ms, mvs } from "react-native-size-matters";
+
+const Tab = createMaterialTopTabNavigator();
+
+interface AnimatedTabItemProps {
+  focused: boolean;
+  IconComponent: React.FC<React.SVGProps<SVGSVGElement>>;
+  label: string;
+}
+
+const AnimatedTabItem: React.FC<AnimatedTabItemProps> = ({
+  focused,
+  IconComponent,
+  label,
+}) => {
+  const scale = useRef(new Animated.Value(1)).current;
+
+  React.useEffect(() => {
+    Animated.timing(scale, {
+      toValue: focused ? 1.4 : 1, // Scale up to 1.5x when focused
+      duration: 200,
+      useNativeDriver: true,
+    }).start();
+  }, [focused]);
+
+  return (
+    <Animated.View
+      style={[
+        styles.iconAndLabelContainer,
+        {
+          transform: [{ scale }],
+        },
+      ]}
+    >
+      <IconComponent
+        width={ms(20)}
+        height={ms(20)}
+        color={focused ? "#3B6064" : "#CECECE"}
+      />
+      <ThemedText
+        type="default"
+        style={{
+          color: focused ? "#3B6064" : "#CECECE",
+          fontSize: ms(10),
+        }}
+      >
+        {label}
+      </ThemedText>
+    </Animated.View>
+  );
+};
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
 
+  const renderTabIconAndLabel = (
+    IconComponent: React.FC<React.SVGProps<SVGSVGElement>>,
+    label: string,
+    focused: boolean
+  ) => (
+    <AnimatedTabItem
+      focused={focused}
+      IconComponent={IconComponent}
+      label={label}
+    />
+  );
+
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? "light"].tabIconSelected,
-        tabBarInactiveTintColor: Colors[colorScheme ?? "light"].tabIconDefault,
-        headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarStyle: Platform.select({
-          ios: {
-            position: "absolute",
-            height: 70, // Increase the height of the tab bar
-            paddingBottom: 10, // Adjust spacing inside the tab bar
-            paddingTop: 10, // Add padding to ensure the content is centered
+    <View style={{ flex: 1 }}>
+      <Tab.Navigator
+        tabBarPosition="bottom"
+        screenOptions={{
+          tabBarActiveTintColor: Colors[colorScheme ?? "light"].tabIconSelected,
+          tabBarInactiveTintColor:
+            Colors[colorScheme ?? "light"].tabIconDefault,
+          swipeEnabled: true,
+          tabBarStyle: {
+            height: mvs(70),
+            paddingBottom: 0,
+            paddingTop: ms(15),
             backgroundColor: colorScheme === "light" ? "#000" : "white",
           },
-          default: {
-            height: 70, // Increase the height of the tab bar
-            paddingBottom: 10, // Adjust spacing inside the tab bar
-            paddingTop: 10, // Add padding to ensure the content is centered
-            backgroundColor: colorScheme === "light" ? "#000" : "white",
+          tabBarIndicatorStyle: {
+            backgroundColor: Colors[colorScheme ?? "light"].tabIconSelected,
           },
-        }),
-      }}
-    >
-      <Tabs.Screen
-        name="index"
-        options={{
-          tabBarLabel: ({ focused }) => (
-            <ThemedText
-              type="default"
-              style={{ color: focused ? "#3B6064" : "#CECECE" }}
-            >
-              Home
-            </ThemedText>
-          ),
-          tabBarIcon: ({ focused }) => (
-            <HomeIcon
-              width={focused ? 38 : 20}
-              height={focused ? 38 : 20}
-              color={focused ? "#3B6064" : "#CECECE"}
-            />
-          ),
         }}
-      />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          tabBarLabel: ({ focused }) => (
-            <ThemedText
-              type="default"
-              style={{ color: focused ? "#3B6064" : "#CECECE" }}
-            >
-              Assignments
-            </ThemedText>
-          ),
-          tabBarIcon: ({ focused }) => (
-            <AssignmentIcon
-              width={focused ? 38 : 20}
-              height={focused ? 38 : 20}
-              color={focused ? "#3B6064" : "#CECECE"}
-            />
-          ),
-        }}
-      />
-    </Tabs>
+      >
+        <Tab.Screen
+          name="template"
+          component={TemplateScreen}
+          options={{
+            tabBarLabel: ({ focused }) =>
+              renderTabIconAndLabel(AssignmentIcon, "Assignments", focused),
+          }}
+        />
+        <Tab.Screen
+          name="index"
+          component={IndexScreen}
+          options={{
+            tabBarLabel: ({ focused }) =>
+              renderTabIconAndLabel(HomeIcon, "Home", focused),
+          }}
+        />
+        <Tab.Screen
+          name="explore"
+          component={ExploreScreen}
+          options={{
+            tabBarLabel: ({ focused }) =>
+              renderTabIconAndLabel(AssignmentIcon, "Assignments", focused),
+          }}
+        />
+      </Tab.Navigator>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  iconAndLabelContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+});

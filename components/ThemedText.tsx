@@ -2,7 +2,7 @@ import React from "react";
 import { Text, TextProps, StyleSheet } from "react-native";
 
 export type ThemedTextProps = TextProps & {
-  type?: "default" | "mBold" | "pBold" | "pMedium" | "pSemiBold";
+  type?: "default" | "mBold" | "pBold" | "pMedium" | "pSemiBold" | "pExtraBold";
 };
 
 export function ThemedText({
@@ -18,6 +18,9 @@ export function ThemedText({
       break;
     case "pBold":
       fontFamily = "Poppins-Bold";
+      break;
+    case "pExtraBold":
+      fontFamily = "Poppins-ExtraBold";
       break;
     case "pMedium":
       fontFamily = "Poppins-Medium";
