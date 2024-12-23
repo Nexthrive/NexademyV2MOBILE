@@ -429,6 +429,7 @@ export default function HomeScreen() {
                   style={{
                     padding: ms(12),
                     paddingBottom: ms(15),
+                    minHeight: mvs(354),
                     borderRadius: ms(4),
                   }}
                 >
@@ -445,7 +446,7 @@ export default function HomeScreen() {
                     </ThemedText>
                     <Feather name="chevron-right" size={ms(15)} color="#000" />
                   </View>
-                  <View className="flex flex-col " style={{ gap: ms(14) }}>
+                  <View className="flex flex-col " style={{ gap: ms(8) }}>
                     <View
                       className="bg-[#F2F2F2] flex flex-row items-center"
                       style={{

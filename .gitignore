@@ -36,3 +36,6 @@ yarn-error.*
 *.tsbuildinfo
 
 app-example
+
+nexademy-a410e-firebase-adminsdk-gnmse-ccd483d54f.json
+google-services.json

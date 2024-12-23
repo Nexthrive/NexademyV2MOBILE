@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "NexademyV2MOBILE",
+    "name": "Nexademy Student",
     "slug": "nexademy",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -16,7 +16,8 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.nexthrivestudios.nexademy"
+      "package": "com.nexthrivecompany.nexademy",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "bundler": "metro",
