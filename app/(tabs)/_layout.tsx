@@ -82,6 +82,7 @@ export default function TabLayout() {
         tabBarPosition="bottom"
         screenOptions={{
           tabBarActiveTintColor: Colors[colorScheme ?? "light"].tabIconSelected,
+
           tabBarInactiveTintColor:
             Colors[colorScheme ?? "light"].tabIconDefault,
           swipeEnabled: true,
@@ -89,7 +90,7 @@ export default function TabLayout() {
             height: mvs(70),
             paddingBottom: 0,
             paddingTop: ms(15),
-            backgroundColor: colorScheme === "light" ? "#000" : "white",
+            backgroundColor: "white",
           },
           tabBarIndicatorStyle: {
             backgroundColor: Colors[colorScheme ?? "light"].tabIconSelected,

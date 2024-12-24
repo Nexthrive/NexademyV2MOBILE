@@ -10,7 +10,7 @@ const LoginScreen = () => {
   };
 
   return (
-    <View>
+    <View className="mt-44">
       <Text>Login Screen</Text>
       <Button title="Login" onPress={handleLogin} />
     </View>
