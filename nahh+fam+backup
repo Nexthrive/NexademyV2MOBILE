@@ -1,0 +1,275 @@
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Dimensions,
+} from "react-native";
+import { moderateScale, scale, verticalScale } from "react-native-size-matters";
+import { useAuth } from "../context/AuthContext";
+
+const { height } = Dimensions.get("window");
+
+const LoginScreen = () => {
+  const { login } = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleLogin = () => {
+    login();
+  };
+
+  return (
+    <View style={styles.container}>
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1 }}
+        style={styles.scrollView}
+      >
+        {/* Top Section */}
+        <View style={styles.topSection}>
+          {/* Logo */}
+          <Image
+            source={require("../assets/images/nex_logo.png")}
+            style={styles.logo}
+            resizeMode="contain"
+          />
+
+          {/* "SMK TUNAS MERDEKA" */}
+          <Text style={styles.schoolName}>SMK TUNAS MERDEKA</Text>
+
+          {/* Illustration */}
+          <Image
+            source={require("../assets/images/login_guy.png")}
+            style={styles.illustration}
+            resizeMode="contain"
+          />
+        </View>
+
+        {/* Bottom Section */}
+        <View style={styles.bottomSection}>
+          {/* Welcome Back Section */}
+          <Text style={styles.welcomeText}>Welcome Back !</Text>
+          <Text style={styles.detailsText}>Please enter your details</Text>
+
+          {/* Input Fields */}
+          <View style={styles.inputContainer}>
+            <TextInput
+              placeholder="E-mail"
+              style={styles.inputUnderline}
+              keyboardType="email-address"
+              autoCapitalize="none"
+            />
+            <View style={styles.passwordContainer}>
+              <TextInput
+                placeholder="Passphrase"
+                style={styles.inputUnderline}
+                secureTextEntry={!showPassword}
+              />
+              <TouchableOpacity
+                onPress={() => setShowPassword(!showPassword)}
+                style={styles.eyeIconContainer}
+              >
+                <Image
+                  source={
+                    showPassword
+                      ? require("../assets/images/eye_icon_slash.png")
+                      : require("../assets/images/eye_icon.png")
+                  }
+                  style={styles.eyeIcon}
+                  resizeMode="contain"
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          {/* Remember Me Checkbox */}
+          <View style={styles.rememberContainer}>
+            <View style={styles.checkbox} />
+            <Text style={styles.rememberText}>Remember for 30 days</Text>
+          </View>
+
+          {/* Login Button */}
+          <TouchableOpacity onPress={handleLogin} style={styles.loginButton}>
+            <Text style={styles.loginButtonText}>Log In</Text>
+          </TouchableOpacity>
+
+          {/* OR Section */}
+            <View style={styles.orContainer}>
+            <View style={styles.line} />
+            <Text style={styles.orText}>OR</Text>
+            <View style={styles.line} />
+          </View>
+
+          {/* Google Login Button */}
+          <TouchableOpacity
+            onPress={() => console.log("Google Login")}
+            style={styles.googleButton}
+          >
+            <Image
+              source={require("../assets/images/google_logo.png")}
+              style={styles.googleLogo}
+              resizeMode="contain"
+            />
+            <Text style={styles.googleButtonText}>Log In with Google</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#FCFFFF",
+  },
+  scrollView: {
+    flex: 1,
+  },
+  topSection: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: verticalScale(16),
+  },
+  logo: {
+    width: scale(52),
+    height: scale(52),
+  },
+  schoolName: {
+    color: "#808080",
+    fontSize: moderateScale(10),
+    letterSpacing: moderateScale(6),
+    marginTop: verticalScale(8),
+  },
+  illustration: {
+    width: scale(244),
+    height: verticalScale(227),
+    marginTop: verticalScale(16),
+  },
+  bottomSection: {
+    backgroundColor: "#FFFFFF",
+    height: height * 0.4,
+    borderTopLeftRadius: moderateScale(16),
+    borderTopRightRadius: moderateScale(16),
+    shadowColor: "#D5E2E2",
+    shadowOffset: { width: 0, height: -10 },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    paddingHorizontal: moderateScale(46),
+    alignItems: "center",
+  },
+  welcomeText: {
+    fontFamily: "Montserrat",
+    color: "#1E1E1E",
+    fontSize: moderateScale(30),
+    letterSpacing: moderateScale(.5),
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  detailsText: {
+    fontFamily: "Poppins",
+    color: "#808080",
+    fontSize: moderateScale(12),
+    textAlign: "center",
+  },
+  inputContainer: {
+    width: "100%",
+    marginTop: verticalScale(16),
+    gap: verticalScale(16),
+  },
+  inputUnderline: {
+    width: "100%",
+    borderBottomWidth: 1,
+    borderColor: "#1E1E1E",
+    fontSize: moderateScale(14),
+    paddingVertical: verticalScale(8),
+  },
+  passwordContainer: {
+    width: "100%",
+    position: "relative",
+  },
+  eyeIconContainer: {
+    position: "absolute",
+    right: moderateScale(16),
+    top: "65%",
+    transform: [{ translateY: -verticalScale(12) }],
+  },
+  eyeIcon: {
+    width: scale(18),
+    height: scale(18),
+  },
+  rememberContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: "100%",
+    marginTop: verticalScale(8),
+  },
+  checkbox: {
+    width: scale(14),
+    height: scale(14),
+    borderWidth: 1,
+    borderColor: "#A2A2A2",
+    backgroundColor: "#ECECEC",
+    borderRadius: moderateScale(4),
+  },
+  rememberText: {
+    color: "#1E1E1E",
+    fontSize: moderateScale(10),
+    marginLeft: moderateScale(8),
+  },
+  orContainer: {
+    flexDirection: "row",
+    width: "90%",
+    alignItems: "center",
+    marginVertical: verticalScale(4),
+  },
+  line: {
+    flex: 1,
+    height: 1,
+    backgroundColor: "#CFCECE",
+  },
+  orText: {
+    marginHorizontal: moderateScale(8),
+    color: "#CFCECE",
+    fontSize: moderateScale(12),
+  },
+  loginButton: {
+    width: "100%",
+    backgroundColor: "#3B6064",
+    borderRadius: moderateScale(26),
+    paddingVertical: verticalScale(12),
+  },
+  loginButtonText: {
+    color: "#FFFFFF",
+    fontSize: moderateScale(14),
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  googleButton: {
+    width: "100%",
+    borderWidth: 1,
+    borderColor: "#FFFFFF",
+    backgroundColor: "#FAFAFA",
+    borderRadius: moderateScale(26),
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: verticalScale(16),
+  },
+  googleLogo: {
+    width: scale(22),
+    height: scale(22),
+    marginRight: moderateScale(8),
+  },
+  googleButtonText: {
+    color: "#1E1E1E",
+    fontSize: moderateScale(14),
+    fontWeight: "bold",
+  },
+});
+
+export default LoginScreen;
+
