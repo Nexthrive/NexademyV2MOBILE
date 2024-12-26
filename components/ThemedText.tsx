@@ -2,7 +2,14 @@ import React from "react";
 import { Text, TextProps, StyleSheet } from "react-native";
 
 export type ThemedTextProps = TextProps & {
-  type?: "default" | "mBold" | "pBold" | "pMedium" | "pSemiBold" | "pExtraBold";
+  type?:
+    | "default"
+    | "mBold"
+    | "pBold"
+    | "pMedium"
+    | "pSemiBold"
+    | "pExtraBold"
+    | "mSemiBold";
 };
 
 export function ThemedText({
@@ -15,6 +22,9 @@ export function ThemedText({
   switch (type) {
     case "mBold":
       fontFamily = "Montserrat";
+      break;
+    case "mSemiBold":
+      fontFamily = "Montserrat-SemiBold";
       break;
     case "pBold":
       fontFamily = "Poppins-Bold";

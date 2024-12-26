@@ -27,7 +27,7 @@ function RootLayoutContent() {
     "Poppins-Medium": require("../assets/fonts/Poppins-Medium.ttf"), // Add this line
     "Poppins-SemiBold": require("../assets/fonts/Poppins-SemiBold.ttf"), // Add this line
     "Poppins-ExtraBold": require("../assets/fonts/Poppins-ExtraBold.ttf"), // Add this line
-
+    "Montserrat-SemiBold": require("../assets/fonts/Montserrat-SemiBold.ttf"), // Add this line
     Montserrat: require("../assets/fonts/Montserrat-Bold.ttf"),
   });
 

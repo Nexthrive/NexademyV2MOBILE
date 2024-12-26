@@ -7,17 +7,107 @@ import {
   ScrollView,
   View,
   TouchableOpacity,
+  FlatList,
 } from "react-native";
 import { Shadow } from "react-native-shadow-2";
 import { Feather } from "@expo/vector-icons"; // Import Expo Icons
-
+import { useState } from "react";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { ScaledSheet, ms, s, vs, mvs } from "react-native-size-matters";
+import { useStoreRootState } from "expo-router/build/global-state/router-store";
+import Svg, { Path } from "react-native-svg";
 
 export default function HomeScreen() {
+  const [isFlatListScrolling, setIsFlatListScrolling] = useState(false);
+
+  const data = [
+    {
+      id: "1",
+      name: "Agus Slowhend, S.Bdy.",
+      subject: "Seni Budaya",
+      time: "07:00",
+      isHighlighted: false,
+    },
+    {
+      id: "2",
+      name: "Agus Slowhend, S.Bdy.",
+      subject: "Seni Budaya",
+      time: "07:00",
+      isHighlighted: false,
+    },
+    {
+      id: "3",
+      name: "Miyarti, S.Pd.,",
+      subject: "Matematika",
+      time: "13:00",
+      isHighlighted: true,
+    },
+    {
+      id: "4",
+      name: "Prof. Asep Elmen",
+      subject: "IPA",
+      time: "14:00",
+      isHighlighted: false,
+    },
+    {
+      id: "5",
+      name: "Anton Maulana, S.Kom.,",
+      subject: "TIK",
+      time: "15:00",
+      isHighlighted: false,
+    },
+    {
+      id: "6",
+      name: "Anton Maulana, S.Kom.,",
+      subject: "TIK",
+      time: "15:00",
+      isHighlighted: false,
+    },
+  ];
+  const renderItem = ({ item }) => (
+    <View
+      className={`flex flex-row items-center ${
+        item.isHighlighted ? "bg-[#55828B]" : "bg-[#F2F2F2]"
+      } `}
+      style={{
+        borderRadius: ms(4),
+        padding: ms(13),
+        width: ms(160),
+      }}
+    >
+      <View className="" style={{ width: ms(110) }}>
+        <ThemedText
+          className={`font-light italic ${
+            item.isHighlighted ? "text-[#FFFFFF]" : "text-[#C0C0C0]"
+          }`}
+          style={{ fontSize: ms(8) }}
+        >
+          {item.name}
+        </ThemedText>
+        <ThemedText
+          className={`${
+            item.isHighlighted ? "text-[#FFFFFF]" : "text-[#C0C0C0]"
+          }`}
+          type="pSemiBold"
+          style={{ fontSize: ms(10), height: mvs(13) }}
+        >
+          {item.subject}
+        </ThemedText>
+      </View>
+      <ThemedText
+        className={`${
+          item.isHighlighted ? "text-[#FFFFFF]" : "text-[#C0C0C0]"
+        }`}
+        type="pSemiBold"
+        style={{ fontSize: ms(10) }}
+      >
+        {item.time}
+      </ThemedText>
+    </View>
+  );
   const handleLogout = async () => {
     await AsyncStorage.removeItem("userToken");
     console.log("Logged out");
@@ -26,13 +116,19 @@ export default function HomeScreen() {
   return (
     <ScrollView
       contentContainerStyle={{ flexGrow: 1 }}
+      keyboardShouldPersistTaps="handled"
       className="bg-[#fcffff]  h-full"
+      onStartShouldSetResponder={() => !isFlatListScrolling}
+      onMoveShouldSetResponder={() => !isFlatListScrolling}
     >
       {/* <Button title="Logout" onPress={handleLogout} /> */}
 
       <ThemedView style={styles.titleContainer}>
-        <View className="flex flex-col items-center justify-between gap-3">
-          <View className="flex flex-col items-center justify-center">
+        <View className="flex flex-col items-center justify-between w-full gap-3">
+          <View
+            className="flex flex-col items-center justify-center"
+            style={{ maxWidth: ms(500) }}
+          >
             <View className="flex flex-row items-center justify-between w-full">
               <View className="flex flex-col ">
                 <ThemedText
@@ -49,6 +145,7 @@ export default function HomeScreen() {
                   what should we do today?
                 </ThemedText>
               </View>
+
               <View className="flex flex-row items-center justify-between gap-3">
                 <Shadow
                   offset={[0, ms(4)]}
@@ -252,8 +349,13 @@ export default function HomeScreen() {
               </View>
             </Shadow>
             <View
-              className="flex flex-row w-full"
-              style={{ gap: ms(10), marginTop: ms(20) }}
+              className="flex flex-row w-full "
+              style={{
+                gap: ms(10),
+                marginTop: ms(20),
+
+                maxHeight: mvs(360),
+              }}
             >
               {/* Left Column */}
               <View className="flex flex-col" style={{ gap: ms(14) }}>
@@ -299,7 +401,7 @@ export default function HomeScreen() {
                         style={{
                           fontSize: ms(40),
                           lineHeight: ms(46),
-                          height: mvs(30),
+                          height: mvs(32),
                         }}
                       >
                         241
@@ -422,7 +524,7 @@ export default function HomeScreen() {
               </View>
 
               {/* Right Column */}
-              <View className="">
+              <View style={{ height: "100%" }}>
                 <Shadow
                   offset={[0, 4]}
                   distance={10}
@@ -431,188 +533,51 @@ export default function HomeScreen() {
                     borderRadius: ms(16),
                   }}
                 >
-                  <View
-                    className="w-full bg-white "
-                    style={{
-                      padding: ms(12),
-                      paddingBottom: ms(15),
-                      minHeight: mvs(354),
-                      borderRadius: ms(4),
-                    }}
-                  >
+                  <View>
                     <View
-                      className="flex flex-row items-center justify-between"
-                      style={{ gap: ms(10), marginBottom: ms(10) }}
+                      className="w-full h-full bg-white"
+                      style={{
+                        padding: ms(12),
+                        paddingBottom: ms(15),
+                        borderRadius: ms(4),
+                      }}
                     >
-                      <ThemedText
-                        className=""
-                        type="pBold"
-                        style={{ fontSize: ms(15) }}
+                      <View
+                        className="flex flex-row items-center justify-between"
+                        style={{ gap: ms(10), marginBottom: ms(10) }}
                       >
-                        Today's Schedule
-                      </ThemedText>
-                      <Feather
-                        name="chevron-right"
-                        size={ms(15)}
-                        color="#000"
+                        <ThemedText
+                          className=""
+                          type="pBold"
+                          style={{ fontSize: ms(15) }}
+                        >
+                          Today's Schedule
+                        </ThemedText>
+                        <Feather
+                          name="chevron-right"
+                          size={ms(15)}
+                          color="#000"
+                        />
+                      </View>
+
+                      {/* Wrap the content that can overflow in a ScrollView */}
+                      <FlatList
+                        data={data}
+                        renderItem={renderItem}
+                        keyExtractor={(item) => item.id}
+                        contentContainerStyle={{ flexGrow: 1, gap: ms(8) }}
+                        showsVerticalScrollIndicator={false}
+                        nestedScrollEnabled={true} // Mengaktifkan scroll nested
+                        scrollEnabled={true} // Memastikan FlatList dapat di-scroll
+                        onScrollBeginDrag={() => setIsFlatListScrolling(true)} // Deteksi mulai scroll
+                        onScrollEndDrag={() => setIsFlatListScrolling(false)} // Deteksi selesai scroll
+                        onMomentumScrollEnd={() =>
+                          setIsFlatListScrolling(false)
+                        } // Akhiri gesture scroll
+                        onMomentumScrollBegin={() =>
+                          setIsFlatListScrolling(true)
+                        } // Gesture scroll dimulai
                       />
-                    </View>
-                    <View className="flex flex-col " style={{ gap: ms(8) }}>
-                      <View
-                        className="bg-[#F2F2F2] flex flex-row items-center"
-                        style={{
-                          borderRadius: ms(4),
-                          padding: ms(13),
-                          width: ms(160),
-                        }}
-                      >
-                        <View className="" style={{ width: ms(110) }}>
-                          <ThemedText
-                            className="text-[#C0C0C0] font-light  italic"
-                            style={{ fontSize: ms(8) }}
-                          >
-                            Agus Slowhend, S.Bdy.,
-                          </ThemedText>
-                          <ThemedText
-                            className="text-[#C0C0C0] "
-                            type="pSemiBold"
-                            style={{ fontSize: ms(10), height: mvs(13) }}
-                          >
-                            Seni Budaya
-                          </ThemedText>
-                        </View>
-                        <ThemedText
-                          className="text-[#C0C0C0] "
-                          type="pSemiBold"
-                          style={{ fontSize: ms(10) }}
-                        >
-                          07:00
-                        </ThemedText>
-                      </View>
-                      <View
-                        className="bg-[#F2F2F2] flex flex-row items-center"
-                        style={{
-                          borderRadius: ms(4),
-                          padding: ms(13),
-                          width: ms(160),
-                        }}
-                      >
-                        <View className="" style={{ width: ms(110) }}>
-                          <ThemedText
-                            className="text-[#C0C0C0] font-light  italic"
-                            style={{ fontSize: ms(8) }}
-                          >
-                            Teti Majid, Ir. S.Pd.,
-                          </ThemedText>
-                          <ThemedText
-                            className="text-[#C0C0C0] "
-                            type="pSemiBold"
-                            style={{ fontSize: ms(10), height: mvs(13) }}
-                          >
-                            Bahasa Indonesia
-                          </ThemedText>
-                        </View>
-                        <ThemedText
-                          className="text-[#C0C0C0] "
-                          type="pSemiBold"
-                          style={{ fontSize: ms(10) }}
-                        >
-                          10:00
-                        </ThemedText>
-                      </View>
-                      <View
-                        className="bg-[#55828B] flex flex-row items-center"
-                        style={{
-                          borderRadius: ms(4),
-                          padding: ms(13),
-                          width: ms(160),
-                        }}
-                      >
-                        <View className="" style={{ width: ms(110) }}>
-                          <ThemedText
-                            className="text-[#FFFFFF] font-light  italic"
-                            style={{ fontSize: ms(8) }}
-                          >
-                            Miyarti, S.Pd,.
-                          </ThemedText>
-                          <ThemedText
-                            className="text-[#FFFFFF] "
-                            type="pSemiBold"
-                            style={{ fontSize: ms(10), height: mvs(13) }}
-                          >
-                            Matematika
-                          </ThemedText>
-                        </View>
-                        <ThemedText
-                          className="text-[#FFFFFF] "
-                          type="pSemiBold"
-                          style={{ fontSize: ms(10) }}
-                        >
-                          13:00
-                        </ThemedText>
-                      </View>
-                      <View
-                        className="bg-[#F2F2F2] flex flex-row items-center"
-                        style={{
-                          borderRadius: ms(4),
-                          padding: ms(13),
-                          width: ms(160),
-                        }}
-                      >
-                        <View className="" style={{ width: ms(110) }}>
-                          <ThemedText
-                            className="text-[#C0C0C0] font-light  italic"
-                            style={{ fontSize: ms(8) }}
-                          >
-                            Prof. Asep Elmen
-                          </ThemedText>
-                          <ThemedText
-                            className="text-[#C0C0C0] "
-                            type="pSemiBold"
-                            style={{ fontSize: ms(10), height: mvs(13) }}
-                          >
-                            IPA
-                          </ThemedText>
-                        </View>
-                        <ThemedText
-                          className="text-[#C0C0C0] "
-                          type="pSemiBold"
-                          style={{ fontSize: ms(10) }}
-                        >
-                          14:00
-                        </ThemedText>
-                      </View>
-                      <View
-                        className="bg-[#F2F2F2] flex flex-row items-center"
-                        style={{
-                          borderRadius: ms(4),
-                          padding: ms(13),
-                          width: ms(160),
-                        }}
-                      >
-                        <View className="" style={{ width: ms(110) }}>
-                          <ThemedText
-                            className="text-[#C0C0C0] font-light  italic"
-                            style={{ fontSize: ms(8) }}
-                          >
-                            Anton Maulana, S.Kom.,
-                          </ThemedText>
-                          <ThemedText
-                            className="text-[#C0C0C0] "
-                            type="pSemiBold"
-                            style={{ fontSize: ms(10), height: mvs(13) }}
-                          >
-                            TIK
-                          </ThemedText>
-                        </View>
-                        <ThemedText
-                          className="text-[#C0C0C0] "
-                          type="pSemiBold"
-                          style={{ fontSize: ms(10) }}
-                        >
-                          15:00
-                        </ThemedText>
-                      </View>
                     </View>
                   </View>
                 </Shadow>
