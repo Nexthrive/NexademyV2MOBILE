@@ -28,7 +28,7 @@ const AnimatedTabItem: React.FC<AnimatedTabItemProps> = ({
 
   React.useEffect(() => {
     Animated.timing(scale, {
-      toValue: focused ? 1.4 : 1, // Scale up to 1.5x when focused
+      toValue: focused ? 1.2 : 1,
       duration: 200,
       useNativeDriver: true,
     }).start();
