@@ -78,50 +78,53 @@ export default function TabLayout() {
 
   return (
     <View style={{ flex: 1 }}>
-      <Tab.Navigator
-        tabBarPosition="bottom"
-        screenOptions={{
-          tabBarActiveTintColor: Colors[colorScheme ?? "light"].tabIconSelected,
+      <View style={styles.shadowContainer}>
+        <Tab.Navigator
+          tabBarPosition="bottom"
+          screenOptions={{
+            tabBarActiveTintColor:
+              Colors[colorScheme ?? "light"].tabIconSelected,
 
-          tabBarInactiveTintColor:
-            Colors[colorScheme ?? "light"].tabIconDefault,
-          swipeEnabled: true,
-          tabBarStyle: {
-            height: mvs(70),
-            paddingBottom: 0,
-            paddingTop: ms(15),
-            backgroundColor: "white",
-          },
-          tabBarIndicatorStyle: {
-            backgroundColor: Colors[colorScheme ?? "light"].tabIconSelected,
-          },
-        }}
-      >
-        <Tab.Screen
-          name="template"
-          component={TemplateScreen}
-          options={{
-            tabBarLabel: ({ focused }) =>
-              renderTabIconAndLabel(AssignmentIcon, "Assignments", focused),
+            tabBarInactiveTintColor:
+              Colors[colorScheme ?? "light"].tabIconDefault,
+            swipeEnabled: true,
+            tabBarStyle: {
+              height: mvs(70),
+              paddingBottom: 0,
+              paddingTop: ms(15),
+              backgroundColor: "white",
+            },
+            tabBarIndicatorStyle: {
+              backgroundColor: Colors[colorScheme ?? "light"].tabIconSelected,
+            },
           }}
-        />
-        <Tab.Screen
-          name="index"
-          component={IndexScreen}
-          options={{
-            tabBarLabel: ({ focused }) =>
-              renderTabIconAndLabel(HomeIcon, "Home", focused),
-          }}
-        />
-        <Tab.Screen
-          name="explore"
-          component={ExploreScreen}
-          options={{
-            tabBarLabel: ({ focused }) =>
-              renderTabIconAndLabel(AssignmentIcon, "Assignments", focused),
-          }}
-        />
-      </Tab.Navigator>
+        >
+          <Tab.Screen
+            name="template"
+            component={TemplateScreen}
+            options={{
+              tabBarLabel: ({ focused }) =>
+                renderTabIconAndLabel(AssignmentIcon, "Assignments", focused),
+            }}
+          />
+          <Tab.Screen
+            name="index"
+            component={IndexScreen}
+            options={{
+              tabBarLabel: ({ focused }) =>
+                renderTabIconAndLabel(HomeIcon, "Home", focused),
+            }}
+          />
+          <Tab.Screen
+            name="explore"
+            component={ExploreScreen}
+            options={{
+              tabBarLabel: ({ focused }) =>
+                renderTabIconAndLabel(AssignmentIcon, "Assignments", focused),
+            }}
+          />
+        </Tab.Navigator>
+      </View>
     </View>
   );
 }
@@ -130,5 +133,16 @@ const styles = StyleSheet.create({
   iconAndLabelContainer: {
     alignItems: "center",
     justifyContent: "center",
+  },
+  shadowContainer: {
+    flex: 1,
+    backgroundColor: "white",
+    // Shadow for iOS
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    // Shadow for Android
+    elevation: 8,
   },
 });
