@@ -1,109 +1,105 @@
-import { StyleSheet, Image, Platform } from 'react-native';
-
-import { Collapsible } from '@/components/Collapsible';
-import { ExternalLink } from '@/components/ExternalLink';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
-import { IconSymbol } from '@/components/ui/IconSymbol';
+import {
+  Image,
+  View,
+  TouchableOpacity,
+  FlatList,
+  Animated,
+  ScrollView,
+  Text,
+} from "react-native";
+import { Shadow } from "react-native-shadow-2";
+import { Feather } from "@expo/vector-icons"; // Import Expo Icons
+import { useState } from "react";
+import { ThemedText } from "@/components/ThemedText";
+import { ThemedView } from "@/components/ThemedView";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { ScaledSheet, ms, s, vs, mvs } from "react-native-size-matters";
+import { useStoreRootState } from "expo-router/build/global-state/router-store";
+import Svg, { Path, G } from "react-native-svg";
+import { SafeAreaView } from "react-native-safe-area-context";
+import React, { useRef } from "react";
 
 export default function TabTwoScreen() {
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
-      headerImage={
-        <IconSymbol
-          size={310}
-          color="#808080"
-          name="chevron.left.forwardslash.chevron.right"
-          style={styles.headerImage}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Explore</ThemedText>
-      </ThemedView>
-      <ThemedText>This app includes example code to help you get started.</ThemedText>
-      <Collapsible title="File-based routing">
-        <ThemedText>
-          This app has two screens:{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/explore.tsx</ThemedText>
-        </ThemedText>
-        <ThemedText>
-          The layout file in <ThemedText type="defaultSemiBold">app/(tabs)/_layout.tsx</ThemedText>{' '}
-          sets up the tab navigator.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/router/introduction">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Android, iOS, and web support">
-        <ThemedText>
-          You can open this project on Android, iOS, and the web. To open the web version, press{' '}
-          <ThemedText type="defaultSemiBold">w</ThemedText> in the terminal running this project.
-        </ThemedText>
-      </Collapsible>
-      <Collapsible title="Images">
-        <ThemedText>
-          For static images, you can use the <ThemedText type="defaultSemiBold">@2x</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">@3x</ThemedText> suffixes to provide files for
-          different screen densities
-        </ThemedText>
-        <Image source={require('@/assets/images/react-logo.png')} style={{ alignSelf: 'center' }} />
-        <ExternalLink href="https://reactnative.dev/docs/images">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Custom fonts">
-        <ThemedText>
-          Open <ThemedText type="defaultSemiBold">app/_layout.tsx</ThemedText> to see how to load{' '}
-          <ThemedText style={{ fontFamily: 'SpaceMono' }}>
-            custom fonts such as this one.
-          </ThemedText>
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/versions/latest/sdk/font">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Light and dark mode components">
-        <ThemedText>
-          This template has light and dark mode support. The{' '}
-          <ThemedText type="defaultSemiBold">useColorScheme()</ThemedText> hook lets you inspect
-          what the user's current color scheme is, and so you can adjust UI colors accordingly.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/develop/user-interface/color-themes/">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Animations">
-        <ThemedText>
-          This template includes an example of an animated component. The{' '}
-          <ThemedText type="defaultSemiBold">components/HelloWave.tsx</ThemedText> component uses
-          the powerful <ThemedText type="defaultSemiBold">react-native-reanimated</ThemedText>{' '}
-          library to create a waving hand animation.
-        </ThemedText>
-        {Platform.select({
-          ios: (
-            <ThemedText>
-              The <ThemedText type="defaultSemiBold">components/ParallaxScrollView.tsx</ThemedText>{' '}
-              component provides a parallax effect for the header image.
+    <ScrollView className="bg-[#FCFFFF] flex flex-col">
+      <View className="flex flex-col">
+        <View
+          style={{ marginTop: ms(60), marginInline: ms(20), width: ms(200) }}
+        >
+          <ThemedText type="mBold">
+            <View
+              style={{
+                borderBottomWidth: ms(3),
+                height: mvs(30),
+                borderBottomColor: "#3b6064",
+              }}
+            >
+              <ThemedText type="mBold" style={{ fontSize: ms(24) }}>
+                Assi
+              </ThemedText>
+            </View>
+
+            <View
+              style={{
+                borderBottomWidth: ms(0),
+                height: mvs(30),
+                borderBottomColor: "transparent",
+              }}
+            >
+              <ThemedText type="mBold" style={{ fontSize: ms(24) }}>
+                g
+              </ThemedText>
+            </View>
+            <View
+              style={{
+                borderBottomWidth: ms(3),
+                height: mvs(30),
+                borderBottomColor: "#3b6064",
+              }}
+            >
+              <ThemedText type="mBold" style={{ fontSize: ms(24) }}>
+                nment's
+              </ThemedText>
+            </View>
+            <ThemedText type="mBold" style={{ fontSize: ms(24) }}>
+              Archive
             </ThemedText>
-          ),
-        })}
-      </Collapsible>
-    </ParallaxScrollView>
+          </ThemedText>
+        </View>
+        <View style={{ marginLeft: ms(20) }}>
+          <ScrollView>
+            <View
+              className="flex "
+              style={{ paddingRight: ms(2), width: ms(250) }}
+            >
+              <View className="flex flex-row justify-between ">
+                <Svg width="165" height="31" viewBox="0 0 165 31" fill="none">
+                  <Path
+                    d="M0 14.0223V31H165C152.81 31 146.384 27.7653 139.336 20.7397C129.712 11.1469 128.749 2.65049 110.464 1.00602C91.0017 1.00602 29.3835 1.05672 14.2106 1C-0.962297 0.943428 0 11.5593 0 14.0223Z"
+                    fill="#493B64"
+                  />
+                </Svg>
+
+                <View
+                  className="flex flex-row items-center justify-center p-2 bg-[#9183AC]"
+                  style={{ paddingInline: ms(16), borderRadius: ms(8) }}
+                ></View>
+              </View>
+
+              <View
+                className="w-full p-5 bg-[#493B64] "
+                style={{
+                  height: mvs(152),
+                  borderBottomLeftRadius: ms(16),
+                  borderBottomRightRadius: ms(16),
+                  borderTopRightRadius: ms(16),
+                }}
+              ></View>
+            </View>
+          </ScrollView>
+        </View>
+      </View>
+    </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  headerImage: {
-    color: '#808080',
-    bottom: -90,
-    left: -35,
-    position: 'absolute',
-  },
-  titleContainer: {
-    flexDirection: 'row',
-    gap: 8,
-  },
-});
