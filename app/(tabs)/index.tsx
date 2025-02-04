@@ -1,10 +1,5 @@
 import {
   Image,
-  StyleSheet,
-  Platform,
-  Text,
-  Button,
-  ScrollView,
   View,
   TouchableOpacity,
   FlatList,
@@ -292,7 +287,7 @@ export default function HomeScreen() {
                       className="text-black "
                       style={{
                         paddingLeft: ms(14),
-                        paddingTop: ms(10),
+                        paddingTop: ms(8),
                         letterSpacing: ms(-1),
 
                         fontSize: ms(20),
