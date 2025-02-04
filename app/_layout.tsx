@@ -12,6 +12,7 @@ import { AuthProvider, useAuth } from "../context/AuthContext";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import LoginScreen from "@/components/LoginScreen";
 import "../global.css";
+import { ActivityIndicator } from "react-native";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -20,12 +21,26 @@ function RootLayoutContent() {
   const colorScheme = useColorScheme();
   const { isLoggedIn } = useAuth(); // Use login state
 
+  const [fontsLoaded] = useFonts({
+    Poppins: require("../assets/fonts/Poppins-Regular.ttf"),
+    "Poppins-Bold": require("../assets/fonts/Poppins-Bold.ttf"),
+    "Poppins-Medium": require("../assets/fonts/Poppins-Medium.ttf"), // Add this line
+    "Poppins-SemiBold": require("../assets/fonts/Poppins-SemiBold.ttf"), // Add this line
+    "Poppins-ExtraBold": require("../assets/fonts/Poppins-ExtraBold.ttf"), // Add this line
+    "Montserrat-SemiBold": require("../assets/fonts/Montserrat-SemiBold.ttf"), // Add this line
+    Montserrat: require("../assets/fonts/Montserrat-Bold.ttf"),
+  });
+
   useEffect(() => {
     SplashScreen.hideAsync();
   }, []);
 
   if (isLoggedIn === null) {
-    return null; // Show loading spinner or null while checking login state
+    return <ActivityIndicator />; // Show loading spinner or null while checking login state
+  }
+
+  if (!fontsLoaded) {
+    return <ActivityIndicator />;
   }
 
   return (
