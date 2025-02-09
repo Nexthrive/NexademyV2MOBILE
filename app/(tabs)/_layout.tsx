@@ -135,14 +135,6 @@ export default function TabLayout() {
               renderTabIconAndLabel(AssignmentIcon, "Assignments", focused),
           }}
         />
-        <Tab.Screen
-          name="pop"
-          component={ExploreScreen}
-          options={{
-            tabBarLabel: ({ focused }) =>
-              renderTabIconAndLabel(AssignmentIcon, "Assignments", focused),
-          }}
-        />
       </Tab.Navigator>
     </View>
   );
