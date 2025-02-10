@@ -6,7 +6,11 @@ import {
   Animated,
   ScrollView,
   Text,
+  Modal,
+  Pressable,
 } from "react-native";
+import { MotiView, MotiText } from "moti";
+
 import { Shadow } from "react-native-shadow-2";
 import { Feather } from "@expo/vector-icons"; // Import Expo Icons
 import { useState } from "react";
@@ -68,7 +72,43 @@ export default function TabTwoScreen() {
       ellipseColor: "#4A2323",
     },
   ];
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [popupColor, setPopupColor] = useState("#FFFFFF"); // Default warna
+  const [textColor, setTextColor] = useState("#FFFFFF"); // Default warna
+  const [subTextColor, setSubTextColor] = useState("#B5B5B5"); // Default warna
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [teacher, setTeacher] = useState("");
+  const [image, setImage] = useState("");
+  const [popupData, setPopupData] = useState({});
+  const touchableRef = useRef(null);
+  const [position, setPosition] = useState({ x: 0, y: 0, width: 0, height: 0 });
 
+  const openPopup = (
+    bgColor,
+    title,
+    description,
+    teacher,
+    image,
+    textColor,
+    subTextColor
+  ) => {
+    if (touchableRef.current) {
+      touchableRef.current.measure((fx, fy, width, height, px, py) => {
+        setPosition({ x: px, y: py, width, height });
+        setPopupData({
+          bgColor,
+          title,
+          description,
+          teacher,
+          image,
+          textColor,
+          subTextColor,
+        });
+        setIsModalVisible(true);
+      });
+    }
+  };
   const Card = ({ item }) => (
     <View style={{ width: ms(250) }}>
       <View className="flex flex-row justify-between ">
@@ -136,104 +176,221 @@ export default function TabTwoScreen() {
           />
         </View>
       </View>
-
-      <View
+      <Pressable
         className="relative w-full -z-10"
-        style={{
-          height: mvs(152),
-          paddingInline: ms(12),
-          paddingTop: ms(12),
-          borderBottomLeftRadius: ms(16),
-          borderBottomRightRadius: ms(16),
-          borderTopRightRadius: ms(16),
-          backgroundColor: item.bgColor,
-        }}
+        ref={touchableRef}
+        onPress={() =>
+          openPopup(
+            item.bgColor,
+            item.title,
+            item.description,
+            item.teacher,
+            item.image,
+            item.textColor,
+            item.subTextColor
+          )
+        }
       >
-        <View style={{ marginTop: ms(5) }}>
-          <ThemedText
-            type="mSemiBold"
-            className="text-white"
-            style={{ fontSize: ms(20), color: item.textColor }}
-          >
-            {item.title}
-          </ThemedText>
-          <ThemedText
-            className="text-[#B5B5B5]"
-            style={{
-              fontSize: ms(12),
-              marginBottom: ms(5),
-              color: item.subTextColor,
-            }}
-          >
-            {item.description}
-          </ThemedText>
-          <Svg width={300} height={50} viewBox="0 0 300 50" fill="none">
-            {[
-              [
-                1.01887, 15.2845, 29.5462, 43.8118, 58.0736, 72.3392, 86.6048,
-                100.867, 115.132, 129.398, 143.66, 157.925, 172.191, 186.452,
-                200.718, 214.984, 229.25,
-              ],
-              [
-                1.01887, 15.2845, 29.5462, 43.8118, 58.0736, 72.3392, 86.6048,
-                100.867, 115.132, 129.398, 143.66, 157.925, 172.191, 186.452,
-                200.718, 214.984, 229.25,
-              ],
-              [
-                1.01887, 15.2845, 29.5462, 43.8118, 58.0736, 72.3392, 86.6048,
-                100.867, 115.132, 129.398, 143.66, 157.925, 172.191, 186.452,
-                200.718, 214.984, 229.25,
-              ],
-            ].map((row, rowIndex) =>
-              row.map((cx) => (
-                <Ellipse
-                  key={`${cx}-${rowIndex}`}
-                  cx={cx}
-                  cy={rowIndex * 14.5 + 1.03333}
-                  rx={1.01887}
-                  ry={1.03333}
-                  fill={item.ellipseColor}
-                />
-              ))
-            )}
-          </Svg>
-          <View className="flex flex-row items-center " style={{ gap: ms(10) }}>
-            <View
+        <View
+          className="relative w-full -z-10"
+          style={{
+            height: mvs(152),
+            paddingInline: ms(12),
+            paddingTop: ms(12),
+            borderBottomLeftRadius: ms(16),
+            borderBottomRightRadius: ms(16),
+            borderTopRightRadius: ms(16),
+            backgroundColor: item.bgColor,
+          }}
+        >
+          <View style={{ marginTop: ms(5) }}>
+            <ThemedText
+              type="mSemiBold"
+              className="text-white"
+              style={{ fontSize: ms(20), color: item.textColor }}
+            >
+              {item.title}
+            </ThemedText>
+            <ThemedText
+              className="text-[#B5B5B5]"
               style={{
-                width: ms(28),
-                height: mvs(27),
-                marginLeft: ms(4),
-                borderRadius: ms(300),
-                borderWidth: ms(1),
-                borderColor: "#FFFFFF",
-                alignItems: "center",
-                justifyContent: "center",
+                fontSize: ms(12),
+                marginBottom: ms(5),
+                color: item.subTextColor,
               }}
             >
-              <Image
-                source={item.image}
-                style={{
-                  width: ms(26),
-                  height: mvs(25),
-                  borderRadius: ms(13),
-                }}
-              />
-            </View>
-            <ThemedText
-              className="italic text-white"
-              style={{ fontSize: ms(10), color: item.textColor }}
-            >
-              {item.teacher}
+              {item.description}
             </ThemedText>
+            <Svg width={300} height={50} viewBox="0 0 300 50" fill="none">
+              {[
+                [
+                  1.01887, 15.2845, 29.5462, 43.8118, 58.0736, 72.3392, 86.6048,
+                  100.867, 115.132, 129.398, 143.66, 157.925, 172.191, 186.452,
+                  200.718, 214.984, 229.25,
+                ],
+                [
+                  1.01887, 15.2845, 29.5462, 43.8118, 58.0736, 72.3392, 86.6048,
+                  100.867, 115.132, 129.398, 143.66, 157.925, 172.191, 186.452,
+                  200.718, 214.984, 229.25,
+                ],
+                [
+                  1.01887, 15.2845, 29.5462, 43.8118, 58.0736, 72.3392, 86.6048,
+                  100.867, 115.132, 129.398, 143.66, 157.925, 172.191, 186.452,
+                  200.718, 214.984, 229.25,
+                ],
+              ].map((row, rowIndex) =>
+                row.map((cx) => (
+                  <Ellipse
+                    key={`${cx}-${rowIndex}`}
+                    cx={cx}
+                    cy={rowIndex * 14.5 + 1.03333}
+                    rx={1.01887}
+                    ry={1.03333}
+                    fill={item.ellipseColor}
+                  />
+                ))
+              )}
+            </Svg>
+            <View
+              className="flex flex-row items-center "
+              style={{ gap: ms(10) }}
+            >
+              <View
+                style={{
+                  width: ms(28),
+                  height: mvs(27),
+                  marginLeft: ms(4),
+                  borderRadius: ms(300),
+                  borderWidth: ms(1),
+                  borderColor: "#FFFFFF",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Image
+                  source={item.image}
+                  style={{
+                    width: ms(26),
+                    height: mvs(25),
+                    borderRadius: ms(13),
+                  }}
+                />
+              </View>
+              <ThemedText
+                className="italic text-white"
+                style={{ fontSize: ms(10), color: item.textColor }}
+              >
+                {item.teacher}
+              </ThemedText>
+            </View>
           </View>
         </View>
-      </View>
+      </Pressable>
     </View>
   );
-  const renderItem = ({ item }) => <Card item={item} />;
 
   return (
     <>
+      <Modal visible={isModalVisible} transparent>
+        <View style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.5)" }}>
+          <MotiView
+            from={{ translateY: -100, opacity: 0 }}
+            animate={{ translateY: 0, opacity: 1 }}
+            transition={{ type: "spring", duration: 50 }}
+            style={{
+              flex: 1,
+              backgroundColor: popupData.bgColor,
+              padding: ms(20),
+            }}
+          >
+            <View className="flex flex-col ">
+              <View className="flex flex-row items-center justify-between">
+                <MotiText
+                  from={{ opacity: 0, translateY: -20 }}
+                  animate={{ opacity: 1, translateY: 0 }}
+                  transition={{ delay: 200 }}
+                  style={{
+                    fontSize: ms(30),
+                    height: ms(33),
+
+                    color: popupData.textColor,
+                  }}
+                >
+                  {popupData.title}
+                </MotiText>
+                <TouchableOpacity
+                  onPress={() => setIsModalVisible(false)}
+                  style={{
+                    backgroundColor: "#FFF",
+                    paddingBlock: ms(1),
+                    paddingInline: ms(7),
+
+                    borderRadius: ms(8),
+                  }}
+                >
+                  <Text style={{ color: "#000" }}>
+                    <MaterialCommunityIcons name="arrow-left" size={ms(20)} />
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              <MotiText
+                from={{ opacity: 0, translateY: -10 }}
+                animate={{ opacity: 1, translateY: 0 }}
+                transition={{ delay: 300 }}
+                style={{
+                  color: popupData.subTextColor,
+                  marginTop: ms(8),
+                  fontSize: ms(12),
+                }}
+              >
+                {popupData.description}
+              </MotiText>
+            </View>
+
+            <MotiView
+              from={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 400 }}
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 10,
+                marginTop: ms(18),
+              }}
+            >
+              <View
+                style={{
+                  width: ms(28),
+                  height: mvs(27),
+                  borderRadius: ms(300),
+                  borderWidth: ms(1),
+                  borderColor: "#FFFFFF",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Image
+                  source={popupData.image}
+                  style={{
+                    width: ms(26),
+                    height: mvs(25),
+                    borderRadius: ms(13),
+                  }}
+                />
+              </View>
+              <MotiText
+                style={{
+                  fontStyle: "italic",
+                  color: popupData.textColor,
+                  fontSize: ms(10),
+                }}
+              >
+                {popupData.teacher}
+              </MotiText>
+            </MotiView>
+          </MotiView>
+        </View>
+      </Modal>
       <Animated.ScrollView
         contentContainerStyle={{ flexGrow: 1 }}
         className="bg-[#FCFFFF] h-full"
