@@ -13,7 +13,7 @@ import { MotiView, MotiText } from "moti";
 
 import { Shadow } from "react-native-shadow-2";
 import { Feather } from "@expo/vector-icons"; // Import Expo Icons
-import { useState } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -30,7 +30,289 @@ import {
   faSortAmountUp,
 } from "@fortawesome/free-solid-svg-icons";
 import { FaSortAmountUp } from "@fortawesome/free-solid-svg-icons";
+const ModalContent = React.memo(({ popupData, onClose }) => {
+  return (
+    <MotiView
+      from={{ translateY: -100, opacity: 0 }}
+      animate={{ translateY: 0, opacity: 1 }}
+      transition={{ type: "spring", duration: 50 }}
+      style={{
+        flex: 1,
+        backgroundColor: popupData.bgColor,
+        padding: ms(20),
+        paddingBlock: ms(50),
+      }}
+    >
+      {/* <View
+        shouldRasterizeIOS
+        renderToHardwareTextureAndroid
+        style={{
+          position: "absolute",
+          zIndex: 1,
+          right: 0,
+          left: 0,
+          marginLeft: ms(12),
+        }}
+      >
+        <Svg width={900} height={900} viewBox="0 0 900 900" fill="none">
+          {Array.from({ length: 30 }, (_, rowIndex) =>
+            [
+              2.82655, 42.4023, 81.9672, 121.543, 161.108, 200.684, 240.259,
+              279.824, 319.4, 358.976, 398.541, 438.116, 477.691, 517.266,
+            ].map((cx) => (
+              <Ellipse
+                key={`${cx}-${rowIndex}`}
+                cx={cx}
+                cy={rowIndex * 40 + 2.86667}
+                rx={2.82655}
+                ry={2.86667}
+                fill={popupData.ellipseColor}
+              />
+            ))
+          )}
+        </Svg>
+      </View> */}
+      <View
+        className="flex flex-col "
+        style={{ position: "relative", zIndex: 2 }}
+      >
+        <View className="flex flex-row items-center justify-between">
+          <MotiText
+            from={{ opacity: 0, translateY: -20 }}
+            animate={{ opacity: 1, translateY: 0 }}
+            transition={{ delay: 200 }}
+            style={{
+              fontSize: ms(30),
+              height: ms(33),
+              fontFamily: "Montserrat-SemiBold",
+              color: popupData.textColor,
+            }}
+          >
+            {popupData.title}
+          </MotiText>
+          <TouchableOpacity
+            onPress={onClose}
+            style={{
+              backgroundColor: "#FFF",
+              paddingBlock: ms(1),
+              paddingInline: ms(7),
 
+              borderRadius: ms(8),
+            }}
+          >
+            <Text style={{ color: "#000" }}>
+              <MaterialCommunityIcons name="arrow-left" size={ms(20)} />
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <MotiText
+          from={{ opacity: 0, translateY: -10 }}
+          animate={{ opacity: 1, translateY: 0 }}
+          transition={{ delay: 300 }}
+          style={{
+            color: popupData.subTextColor,
+            marginTop: ms(8),
+            fontSize: ms(12),
+          }}
+        >
+          {popupData.description}
+        </MotiText>
+      </View>
+
+      <MotiView
+        from={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 400 }}
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          gap: 10,
+          marginTop: ms(18),
+        }}
+      >
+        <View
+          style={{
+            width: ms(28),
+            height: mvs(27),
+            borderRadius: ms(300),
+            borderWidth: ms(1),
+            borderColor: "#FFFFFF",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Image
+            source={popupData.image}
+            style={{
+              width: ms(26),
+              height: mvs(25),
+              borderRadius: ms(13),
+            }}
+          />
+        </View>
+        <MotiText
+          style={{
+            fontStyle: "italic",
+            color: popupData.textColor,
+            fontSize: ms(10),
+          }}
+        >
+          {popupData.teacher}
+        </MotiText>
+      </MotiView>
+      <ScrollView
+        style={{
+          marginTop: ms(24),
+          position: "relative",
+          zIndex: 2,
+        }}
+      >
+        <MotiView
+          from={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 400 }}
+          style={{
+            flexDirection: "col",
+          }}
+        >
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((_, index) => (
+            <View key={index} style={{ marginBottom: ms(16) }}>
+              <View
+                style={{
+                  shadowColor: "#000",
+                  shadowOffset: { width: 0, height: 5 },
+                  shadowOpacity: 0.28,
+                  shadowRadius: 10,
+                  elevation: 4, // Untuk Android
+                  borderRadius: ms(14),
+                }}
+              >
+                <View
+                  className="flex flex-col justify-between "
+                  style={{
+                    width: "100%",
+                    backgroundColor: "#FBFBFB",
+
+                    borderRadius: ms(14),
+                  }}
+                >
+                  <View
+                    className="flex flex-row items-center justify-between"
+                    style={{
+                      marginTop: ms(18),
+                      marginInline: ms(18),
+                      marginBottom: ms(18),
+                    }}
+                  >
+                    <View>
+                      <ThemedText type="mBold" style={{ fontSize: ms(14) }}>
+                        Kerjakan buku halaman 12 ba...
+                      </ThemedText>
+                      <ThemedText
+                        type="pMedium"
+                        className="italic "
+                        style={{
+                          fontSize: ms(12),
+                          lineHeight: ms(15),
+                          color: "#A9A9A9",
+                        }}
+                      >
+                        Matematika
+                      </ThemedText>
+                    </View>
+                    <Svg
+                      width="15"
+                      height="15"
+                      viewBox="0 0 15 15"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <Path
+                        d="M1.86157 15L9.375 7.5L1.86157 0L0 1.85824L5.65186 7.5L0 13.1418L1.86157 15Z"
+                        fill="#1E1E1E"
+                      />
+                      <Path
+                        d="M7.48657 15L15 7.5L7.48657 0L5.625 1.85824L11.2769 7.5L5.625 13.1418L7.48657 15Z"
+                        fill="#1E1E1E"
+                      />
+                    </Svg>
+                  </View>
+                  <View
+                    className="bg-[#493B64] flex flex-row items-center justify-between "
+                    style={{
+                      borderBottomLeftRadius: ms(12),
+                      borderBottomRightRadius: ms(12),
+                      paddingInline: ms(20),
+                      paddingBlock: ms(10),
+                    }}
+                  >
+                    <View
+                      className="flex flex-row items-center"
+                      style={{
+                        gap: ms(10),
+                      }}
+                    >
+                      <MaterialCommunityIcons
+                        name="calendar-month"
+                        size={20}
+                        color="#FEFEFE"
+                      />
+                      <View
+                        className="flex flex-row items-center "
+                        style={{ gap: ms(8) }}
+                      >
+                        <ThemedText
+                          type="pMedium"
+                          style={{ fontSize: ms(10), color: "#FEFEFE" }}
+                        >
+                          5/10/24 | 10/10/24
+                        </ThemedText>
+                      </View>
+                    </View>
+                    <View className="flex flex-row" style={{ gap: ms(5) }}>
+                      <View
+                        className=""
+                        style={{
+                          paddingInline: ms(14),
+                          paddingBlock: ms(4),
+                          borderRadius: ms(12),
+                          backgroundColor: "#3E354F",
+                        }}
+                      >
+                        <ThemedText
+                          type="pMedium"
+                          style={{ fontSize: ms(8), color: "#FFFFFF" }}
+                        >
+                          90
+                        </ThemedText>
+                      </View>
+                      <View
+                        className=""
+                        style={{
+                          paddingInline: ms(14),
+                          paddingBlock: ms(4),
+                          borderRadius: ms(12),
+                          backgroundColor: "#3B6064",
+                        }}
+                      >
+                        <ThemedText
+                          type="pMedium"
+                          style={{ fontSize: ms(8), color: "#FFFFFF" }}
+                        >
+                          Done
+                        </ThemedText>
+                      </View>
+                    </View>
+                  </View>
+                </View>
+              </View>
+            </View>
+          ))}
+        </MotiView>
+      </ScrollView>
+    </MotiView>
+  );
+});
 export default function TabTwoScreen() {
   const [isFlatListScrolling, setIsFlatListScrolling] = useState(false);
   const scrollY = useRef(new Animated.Value(0)).current;
@@ -51,7 +333,7 @@ export default function TabTwoScreen() {
       id: "1",
       title: "Matematika",
       description: "24 Total task's",
-      teacher: "Aldi “Azhar” Yusron, S.Pd.",
+      teacher: `Aldi "Azhar" Yusron, S.Pd.`,
       image: require("../../assets/images/face.jpg"),
       bgColor: "#493B64",
       dotsColor: "#9183AC",
@@ -63,7 +345,7 @@ export default function TabTwoScreen() {
       id: "2",
       title: "PPKN",
       description: "12 Total task's",
-      teacher: "Aldi “Azhar” Yusron, S.Pd.",
+      teacher: `Aldi "Azhar" Yusron, S.Pd.`,
       image: require("../../assets/images/face.jpg"),
       bgColor: "#643B3B",
       dotsColor: "#AA8181",
@@ -73,42 +355,45 @@ export default function TabTwoScreen() {
     },
   ];
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [popupColor, setPopupColor] = useState("#FFFFFF"); // Default warna
-  const [textColor, setTextColor] = useState("#FFFFFF"); // Default warna
-  const [subTextColor, setSubTextColor] = useState("#B5B5B5"); // Default warna
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [teacher, setTeacher] = useState("");
-  const [image, setImage] = useState("");
+
   const [popupData, setPopupData] = useState({});
   const touchableRef = useRef(null);
   const [position, setPosition] = useState({ x: 0, y: 0, width: 0, height: 0 });
 
-  const openPopup = (
-    bgColor,
-    title,
-    description,
-    teacher,
-    image,
-    textColor,
-    subTextColor
-  ) => {
-    if (touchableRef.current) {
-      touchableRef.current.measure((fx, fy, width, height, px, py) => {
-        setPosition({ x: px, y: py, width, height });
-        setPopupData({
-          bgColor,
-          title,
-          description,
-          teacher,
-          image,
-          textColor,
-          subTextColor,
+  const openPopup = useCallback(
+    (
+      bgColor,
+      title,
+      description,
+      teacher,
+      image,
+      textColor,
+      subTextColor,
+      ellipseColor
+    ) => {
+      if (touchableRef.current) {
+        touchableRef.current.measure((fx, fy, width, height, px, py) => {
+          setPosition({ x: px, y: py, width, height });
+          setIsModalVisible(true);
+
+          setPopupData({
+            bgColor,
+            title,
+            description,
+            teacher,
+            image,
+            textColor,
+            subTextColor,
+            ellipseColor,
+          });
         });
-        setIsModalVisible(true);
-      });
-    }
-  };
+      }
+    },
+    [setPosition, setIsModalVisible, setPopupData]
+  );
+  const closePopup = useCallback(() => {
+    setIsModalVisible(false);
+  }, []);
   const Card = ({ item }) => (
     <View style={{ width: ms(250) }}>
       <View className="flex flex-row justify-between ">
@@ -187,7 +472,8 @@ export default function TabTwoScreen() {
             item.teacher,
             item.image,
             item.textColor,
-            item.subTextColor
+            item.subTextColor,
+            item.ellipseColor
           )
         }
       >
@@ -221,7 +507,7 @@ export default function TabTwoScreen() {
             >
               {item.description}
             </ThemedText>
-            <Svg width={300} height={50} viewBox="0 0 300 50" fill="none">
+            <Svg width={800} height={50} viewBox="0 0 800 50" fill="none">
               {[
                 [
                   1.01887, 15.2845, 29.5462, 43.8118, 58.0736, 72.3392, 86.6048,
@@ -288,109 +574,25 @@ export default function TabTwoScreen() {
       </Pressable>
     </View>
   );
+  const memoizedPopupData = useMemo(() => popupData, [popupData]);
 
   return (
     <>
-      <Modal visible={isModalVisible} transparent>
-        <View style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.5)" }}>
-          <MotiView
-            from={{ translateY: -100, opacity: 0 }}
-            animate={{ translateY: 0, opacity: 1 }}
-            transition={{ type: "spring", duration: 50 }}
-            style={{
-              flex: 1,
-              backgroundColor: popupData.bgColor,
-              padding: ms(20),
-            }}
-          >
-            <View className="flex flex-col ">
-              <View className="flex flex-row items-center justify-between">
-                <MotiText
-                  from={{ opacity: 0, translateY: -20 }}
-                  animate={{ opacity: 1, translateY: 0 }}
-                  transition={{ delay: 200 }}
-                  style={{
-                    fontSize: ms(30),
-                    height: ms(33),
-
-                    color: popupData.textColor,
-                  }}
-                >
-                  {popupData.title}
-                </MotiText>
-                <TouchableOpacity
-                  onPress={() => setIsModalVisible(false)}
-                  style={{
-                    backgroundColor: "#FFF",
-                    paddingBlock: ms(1),
-                    paddingInline: ms(7),
-
-                    borderRadius: ms(8),
-                  }}
-                >
-                  <Text style={{ color: "#000" }}>
-                    <MaterialCommunityIcons name="arrow-left" size={ms(20)} />
-                  </Text>
-                </TouchableOpacity>
-              </View>
-              <MotiText
-                from={{ opacity: 0, translateY: -10 }}
-                animate={{ opacity: 1, translateY: 0 }}
-                transition={{ delay: 300 }}
-                style={{
-                  color: popupData.subTextColor,
-                  marginTop: ms(8),
-                  fontSize: ms(12),
-                }}
-              >
-                {popupData.description}
-              </MotiText>
-            </View>
-
-            <MotiView
-              from={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 400 }}
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                gap: 10,
-                marginTop: ms(18),
-              }}
-            >
-              <View
-                style={{
-                  width: ms(28),
-                  height: mvs(27),
-                  borderRadius: ms(300),
-                  borderWidth: ms(1),
-                  borderColor: "#FFFFFF",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <Image
-                  source={popupData.image}
-                  style={{
-                    width: ms(26),
-                    height: mvs(25),
-                    borderRadius: ms(13),
-                  }}
-                />
-              </View>
-              <MotiText
-                style={{
-                  fontStyle: "italic",
-                  color: popupData.textColor,
-                  fontSize: ms(10),
-                }}
-              >
-                {popupData.teacher}
-              </MotiText>
-            </MotiView>
-          </MotiView>
+      {isModalVisible && (
+        <View
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0, // Leave space for tab bar (adjust based on your tab bar height)
+            zIndex: 1000, // Ensure this is higher than other elements
+            display: isModalVisible ? "flex" : "none", // Show/hide using display
+          }}
+        >
+          <ModalContent popupData={memoizedPopupData} onClose={closePopup} />
         </View>
-      </Modal>
+      )}
       <Animated.ScrollView
         contentContainerStyle={{ flexGrow: 1 }}
         className="bg-[#FCFFFF] h-full"
@@ -401,8 +603,6 @@ export default function TabTwoScreen() {
         )}
         scrollEventThrottle={16}
       >
-        {/* <Button title="Logout" onPress={handleLogout} /> */}
-
         <View className="flex flex-col">
           <View
             style={{ marginTop: ms(60), marginInline: ms(20), width: ms(200) }}
