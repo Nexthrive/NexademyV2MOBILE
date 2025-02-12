@@ -102,18 +102,9 @@ export default function TabLayout() {
           },
         }}
       >
-        {/* Other tabs */}
         <Tab.Screen
-          name="no"
+          name="screen"
           component={ExploreScreen}
-          options={{
-            tabBarLabel: ({ focused }) =>
-              renderTabIconAndLabel(AssignmentIcon, "Assignments", focused),
-          }}
-        />
-        <Tab.Screen
-          name="template"
-          component={TemplateScreen}
           options={{
             tabBarLabel: ({ focused }) =>
               renderTabIconAndLabel(AssignmentIcon, "Assignments", focused),

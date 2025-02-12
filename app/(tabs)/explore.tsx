@@ -24,13 +24,225 @@ import Svg, { Path, G, Ellipse } from "react-native-svg";
 import { SafeAreaView } from "react-native-safe-area-context";
 import React, { useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import LoadingOverlay from "@/components/LoadingOverlay";
 import {
   faSortAmountAsc,
   faSortAmountDesc,
   faSortAmountUp,
 } from "@fortawesome/free-solid-svg-icons";
 import { FaSortAmountUp } from "@fortawesome/free-solid-svg-icons";
+const statusColor = {
+  unfinished: "#3E354F", // Add # for hex colors
+  done: "#3B6064",
+  due: "#C99F2C",
+  overdue: "#8C3838",
+};
+const subjectData = [
+  {
+    id: "1",
+    title: "Me Wanna Cleeep",
+    description: "Matematika",
+
+    date1: "5/10/24",
+    date2: "10/10/24",
+    stripColor: "#493B64",
+    status: "Done",
+    grade: "95",
+    gradeColor: "#3E354F",
+    statusColor: statusColor.done,
+    subTextColor: "#A4A4A4",
+    textColor: "#000000",
+    subsubTextColor: "FEFEFE",
+  },
+  {
+    id: "4",
+    title: "Me Wanna Cleeep",
+    description: "PPKN",
+
+    date1: "5/10/24",
+    date2: "10/10/24",
+    stripColor: "#643B3B",
+    status: "Done",
+    grade: "95",
+    gradeColor: "#4F3535",
+    statusColor: statusColor.done,
+    subTextColor: "#A4A4A4",
+    textColor: "#000000",
+    subsubTextColor: "FEFEFE",
+  },
+  {
+    id: "2",
+    title: "Me Wanna Cleeep",
+    description: "Matematika",
+    date1: "5/10/24",
+    date2: "10/10/24",
+    stripColor: "#493B64",
+    status: "Done",
+    grade: "95",
+    gradeColor: "#3E354F",
+    statusColor: statusColor.done,
+    subTextColor: "#A4A4A4",
+    textColor: "#000000",
+    subsubTextColor: "FEFEFE",
+  },
+  {
+    id: "3",
+    title: "Me Wanna Cleeep",
+    description: "Matematika",
+    date1: "5/10/24",
+    date2: "10/10/24",
+    stripColor: "#493B64",
+    status: "Due",
+    grade: "",
+    gradeColor: "#3E354F",
+    statusColor: statusColor.due,
+    subTextColor: "#A4A4A4",
+    textColor: "#000000",
+    subsubTextColor: "FEFEFE",
+  },
+];
+const SubjectCard = ({ item }) => (
+  <View style={{ marginBottom: ms(16) }}>
+    <View
+      style={{
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 5 },
+        shadowOpacity: 0.28,
+        shadowRadius: 10,
+        elevation: 4, // Untuk Android
+        borderRadius: ms(14),
+      }}
+    >
+      <View
+        className="flex flex-col justify-between "
+        style={{
+          width: "100%",
+          backgroundColor: "#FBFBFB",
+
+          borderRadius: ms(14),
+        }}
+      >
+        <View
+          className="flex flex-row items-center justify-between"
+          style={{
+            marginTop: ms(18),
+            marginInline: ms(18),
+            marginBottom: ms(18),
+          }}
+        >
+          <View>
+            <ThemedText type="mBold" style={{ fontSize: ms(14) }}>
+              {item.title}
+            </ThemedText>
+            <ThemedText
+              type="pMedium"
+              className="italic "
+              style={{
+                fontSize: ms(12),
+                lineHeight: ms(15),
+                color: "#A9A9A9",
+              }}
+            >
+              {item.description}
+            </ThemedText>
+          </View>
+          <Svg
+            width="15"
+            height="15"
+            viewBox="0 0 15 15"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <Path
+              d="M1.86157 15L9.375 7.5L1.86157 0L0 1.85824L5.65186 7.5L0 13.1418L1.86157 15Z"
+              fill="#1E1E1E"
+            />
+            <Path
+              d="M7.48657 15L15 7.5L7.48657 0L5.625 1.85824L11.2769 7.5L5.625 13.1418L7.48657 15Z"
+              fill="#1E1E1E"
+            />
+          </Svg>
+        </View>
+        <View
+          className="flex flex-row items-center justify-between "
+          style={{
+            backgroundColor: item.stripColor,
+            borderBottomLeftRadius: ms(12),
+            borderBottomRightRadius: ms(12),
+            paddingInline: ms(20),
+            paddingBlock: ms(10),
+          }}
+        >
+          <View
+            className="flex flex-row items-center"
+            style={{
+              gap: ms(10),
+            }}
+          >
+            <MaterialCommunityIcons
+              name="calendar-month"
+              size={20}
+              color="#FEFEFE"
+            />
+            <View
+              className="flex flex-row items-center "
+              style={{ gap: ms(8) }}
+            >
+              <ThemedText
+                type="pMedium"
+                style={{ fontSize: ms(10), color: "#FEFEFE" }}
+              >
+                {item.date1} | {item.date2}
+              </ThemedText>
+            </View>
+          </View>
+          <View className="flex flex-row items-center " style={{ gap: ms(6) }}>
+            {item.grade && (
+              <View
+                className=""
+                style={{
+                  paddingInline: ms(14),
+                  paddingBlock: ms(4),
+                  borderRadius: ms(12),
+                  backgroundColor: item.gradeColor,
+                }}
+              >
+                <ThemedText
+                  type="pMedium"
+                  style={{ fontSize: ms(8), color: "#FFFFFF" }}
+                >
+                  {item.grade}
+                </ThemedText>
+              </View>
+            )}
+
+            <View
+              className=""
+              style={{
+                paddingInline: ms(14),
+                paddingBlock: ms(4),
+                borderRadius: ms(12),
+                backgroundColor: item.statusColor,
+              }}
+            >
+              <ThemedText
+                type="pMedium"
+                style={{ fontSize: ms(8), color: "#FFFFFF" }}
+              >
+                {item.status}
+              </ThemedText>
+            </View>
+          </View>
+        </View>
+      </View>
+    </View>
+  </View>
+);
 const ModalContent = React.memo(({ popupData, onClose }) => {
+  const filteredSubjectData = subjectData.filter(
+    (item) => item.description === popupData.title
+  );
+
   return (
     <MotiView
       from={{ translateY: -100, opacity: 0 }}
@@ -160,156 +372,117 @@ const ModalContent = React.memo(({ popupData, onClose }) => {
           {popupData.teacher}
         </MotiText>
       </MotiView>
-      <ScrollView
+
+      <MotiView
+        from={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 400 }}
         style={{
-          marginTop: ms(24),
-          position: "relative",
-          zIndex: 2,
+          paddingBottom: ms(60),
         }}
       >
-        <MotiView
-          from={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 400 }}
+        <ScrollView
           style={{
-            flexDirection: "col",
+            marginTop: ms(24),
+            position: "relative",
+            zIndex: 2,
           }}
         >
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((_, index) => (
-            <View key={index} style={{ marginBottom: ms(16) }}>
-              <View
-                style={{
-                  shadowColor: "#000",
-                  shadowOffset: { width: 0, height: 5 },
-                  shadowOpacity: 0.28,
-                  shadowRadius: 10,
-                  elevation: 4, // Untuk Android
-                  borderRadius: ms(14),
-                }}
-              >
-                <View
-                  className="flex flex-col justify-between "
-                  style={{
-                    width: "100%",
-                    backgroundColor: "#FBFBFB",
+          <View>
+            {filteredSubjectData.map((item) => (
+              <SubjectCard key={item.id} item={item} />
+            ))}
+          </View>
+        </ScrollView>
+      </MotiView>
+      <MotiView
+        from={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 400 }}
+        className="flex flex-row items-center justify-center bg-white "
+        style={{
+          width: "74%",
+          padding: ms(10),
+          borderRadius: ms(12),
+          position: "absolute",
+          left: ms(70),
+          right: 0,
+          bottom: ms(30),
+        }}
+      >
+        <View className="flex flex-row justify-center" style={{ gap: ms(18) }}>
+          <View
+            style={{
+              width: ms(40),
+              height: mvs(38),
 
-                    borderRadius: ms(14),
-                  }}
-                >
-                  <View
-                    className="flex flex-row items-center justify-between"
-                    style={{
-                      marginTop: ms(18),
-                      marginInline: ms(18),
-                      marginBottom: ms(18),
-                    }}
-                  >
-                    <View>
-                      <ThemedText type="mBold" style={{ fontSize: ms(14) }}>
-                        Kerjakan buku halaman 12 ba...
-                      </ThemedText>
-                      <ThemedText
-                        type="pMedium"
-                        className="italic "
-                        style={{
-                          fontSize: ms(12),
-                          lineHeight: ms(15),
-                          color: "#A9A9A9",
-                        }}
-                      >
-                        Matematika
-                      </ThemedText>
-                    </View>
-                    <Svg
-                      width="15"
-                      height="15"
-                      viewBox="0 0 15 15"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <Path
-                        d="M1.86157 15L9.375 7.5L1.86157 0L0 1.85824L5.65186 7.5L0 13.1418L1.86157 15Z"
-                        fill="#1E1E1E"
-                      />
-                      <Path
-                        d="M7.48657 15L15 7.5L7.48657 0L5.625 1.85824L11.2769 7.5L5.625 13.1418L7.48657 15Z"
-                        fill="#1E1E1E"
-                      />
-                    </Svg>
-                  </View>
-                  <View
-                    className="bg-[#493B64] flex flex-row items-center justify-between "
-                    style={{
-                      borderBottomLeftRadius: ms(12),
-                      borderBottomRightRadius: ms(12),
-                      paddingInline: ms(20),
-                      paddingBlock: ms(10),
-                    }}
-                  >
-                    <View
-                      className="flex flex-row items-center"
-                      style={{
-                        gap: ms(10),
-                      }}
-                    >
-                      <MaterialCommunityIcons
-                        name="calendar-month"
-                        size={20}
-                        color="#FEFEFE"
-                      />
-                      <View
-                        className="flex flex-row items-center "
-                        style={{ gap: ms(8) }}
-                      >
-                        <ThemedText
-                          type="pMedium"
-                          style={{ fontSize: ms(10), color: "#FEFEFE" }}
-                        >
-                          5/10/24 | 10/10/24
-                        </ThemedText>
-                      </View>
-                    </View>
-                    <View className="flex flex-row" style={{ gap: ms(5) }}>
-                      <View
-                        className=""
-                        style={{
-                          paddingInline: ms(14),
-                          paddingBlock: ms(4),
-                          borderRadius: ms(12),
-                          backgroundColor: "#3E354F",
-                        }}
-                      >
-                        <ThemedText
-                          type="pMedium"
-                          style={{ fontSize: ms(8), color: "#FFFFFF" }}
-                        >
-                          90
-                        </ThemedText>
-                      </View>
-                      <View
-                        className=""
-                        style={{
-                          paddingInline: ms(14),
-                          paddingBlock: ms(4),
-                          borderRadius: ms(12),
-                          backgroundColor: "#3B6064",
-                        }}
-                      >
-                        <ThemedText
-                          type="pMedium"
-                          style={{ fontSize: ms(8), color: "#FFFFFF" }}
-                        >
-                          Done
-                        </ThemedText>
-                      </View>
-                    </View>
-                  </View>
-                </View>
-              </View>
-            </View>
-          ))}
-        </MotiView>
-      </ScrollView>
+              borderRadius: ms(300),
+              borderWidth: ms(2),
+              borderColor: "#3B6064",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <MaterialCommunityIcons name="close" size={30} color="#3B6064" />
+          </View>
+
+          <View
+            style={{
+              width: ms(40),
+              height: mvs(38),
+
+              borderRadius: ms(300),
+              borderWidth: ms(2),
+              borderColor: "#3B6064",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <MaterialCommunityIcons
+              name="check-all"
+              size={26}
+              color="#3B6064"
+            />
+          </View>
+          <View
+            className=""
+            style={{
+              width: ms(40),
+              height: mvs(38),
+
+              borderRadius: ms(300),
+              borderWidth: ms(2),
+              borderColor: "#3B6064",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <FontAwesomeIcon
+              icon={faSortAmountUp}
+              size={20}
+              style={{ color: "#3B6064" }}
+            />
+          </View>
+          <View
+            style={{
+              width: ms(40),
+              height: mvs(38),
+
+              borderRadius: ms(300),
+              borderWidth: ms(2),
+              borderColor: "#3B6064",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <FontAwesomeIcon
+              icon={faSortAmountDesc}
+              style={{ color: "#3B6064" }}
+              size={20}
+            />
+          </View>
+        </View>
+      </MotiView>
     </MotiView>
   );
 });
@@ -328,6 +501,59 @@ export default function TabTwoScreen() {
     outputRange: [ms(60), ms(0)], // Start at 260 and move to 100
     extrapolate: "clamp", // Prevents the value from going beyond the defined range
   });
+  const statusColor = {
+    unfinished: "#3E354F", // Add # for hex colors
+    done: "#3B6064",
+    due: "#C99F2C",
+    overdue: "#8C3838",
+  };
+
+  const assignData = [
+    {
+      id: "1",
+      title: "Kerjakan buku halaman 12 ba...",
+      description: "Matematika",
+
+      date1: "5/10/24",
+      date2: "10/10/24",
+      stripColor: "#493B64",
+      status: "Unfinished",
+      statusColor: statusColor.unfinished,
+      subTextColor: "#A4A4A4",
+      textColor: "#000000",
+      subsubTextColor: "FEFEFE",
+    },
+    {
+      id: "2",
+      title: "HAM is overrated AF",
+      description: "PPKN",
+
+      date1: "5/10/24",
+      date2: "10/10/24",
+      stripColor: "#643B3B",
+      status: "Due",
+      statusColor: statusColor.due,
+      subTextColor: "#A4A4A4",
+      textColor: "#000000",
+      subsubTextColor: "FEFEFE",
+    },
+
+    {
+      id: "3",
+      title: "Teks Puisi",
+      description: "Bahasa Indonesia",
+
+      date1: "5/10/24",
+      date2: "10/10/24",
+      stripColor: "#EC9D1D",
+      status: "Overdue",
+      statusColor: statusColor.overdue,
+      subTextColor: "#A4A4A4",
+      textColor: "#000000",
+      subsubTextColor: "FEFEFE",
+    },
+  ];
+
   const datas = [
     {
       id: "1",
@@ -355,6 +581,7 @@ export default function TabTwoScreen() {
     },
   ];
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isModalLoading, setIsModalLoading] = useState(false);
 
   const [popupData, setPopupData] = useState({});
   const touchableRef = useRef(null);
@@ -362,20 +589,18 @@ export default function TabTwoScreen() {
 
   const openPopup = useCallback(
     (
-      bgColor,
-      title,
-      description,
-      teacher,
-      image,
-      textColor,
-      subTextColor,
-      ellipseColor
+      bgColor: string,
+      title: string,
+      description: string,
+      teacher: string,
+      image: any,
+      textColor: string,
+      subTextColor: string,
+      ellipseColor: string
     ) => {
       if (touchableRef.current) {
         touchableRef.current.measure((fx, fy, width, height, px, py) => {
           setPosition({ x: px, y: py, width, height });
-          setIsModalVisible(true);
-
           setPopupData({
             bgColor,
             title,
@@ -386,22 +611,165 @@ export default function TabTwoScreen() {
             subTextColor,
             ellipseColor,
           });
+          setTimeout(() => {
+            setIsModalVisible(true);
+            setTimeout(() => setIsModalLoading(false), 300);
+          }, 500);
         });
       }
     },
     [setPosition, setIsModalVisible, setPopupData]
   );
   const closePopup = useCallback(() => {
-    setIsModalVisible(false);
+    setIsModalLoading(true); // Show loading when starting to close
+    setTimeout(() => {
+      setIsModalVisible(false);
+      setIsModalLoading(false); // Hide loading after modal is closed
+    }, 300); // Reduced delay for faster transition
   }, []);
+  const AssignCard = ({ item }) => (
+    <View style={{ marginBottom: ms(16) }}>
+      <View
+        style={{
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 5 },
+          shadowOpacity: 0.28,
+          shadowRadius: 10,
+          elevation: 4, // Untuk Android
+          borderRadius: ms(14),
+        }}
+      >
+        <View
+          className="flex flex-col justify-between "
+          style={{
+            width: "100%",
+            backgroundColor: "#FBFBFB",
+
+            borderRadius: ms(14),
+          }}
+        >
+          <View
+            className="flex flex-row items-center justify-between"
+            style={{
+              marginTop: ms(18),
+              marginInline: ms(18),
+              marginBottom: ms(18),
+            }}
+          >
+            <View>
+              <ThemedText type="mBold" style={{ fontSize: ms(14) }}>
+                {item.title}
+              </ThemedText>
+              <ThemedText
+                type="pMedium"
+                className="italic "
+                style={{
+                  fontSize: ms(12),
+                  lineHeight: ms(15),
+                  color: "#A9A9A9",
+                }}
+              >
+                {item.description}
+              </ThemedText>
+            </View>
+            <Svg
+              width="15"
+              height="15"
+              viewBox="0 0 15 15"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <Path
+                d="M1.86157 15L9.375 7.5L1.86157 0L0 1.85824L5.65186 7.5L0 13.1418L1.86157 15Z"
+                fill="#1E1E1E"
+              />
+              <Path
+                d="M7.48657 15L15 7.5L7.48657 0L5.625 1.85824L11.2769 7.5L5.625 13.1418L7.48657 15Z"
+                fill="#1E1E1E"
+              />
+            </Svg>
+          </View>
+          <View
+            className="flex flex-row items-center justify-between "
+            style={{
+              backgroundColor: item.stripColor,
+              borderBottomLeftRadius: ms(12),
+              borderBottomRightRadius: ms(12),
+              paddingInline: ms(20),
+              paddingBlock: ms(10),
+            }}
+          >
+            <View
+              className="flex flex-row items-center"
+              style={{
+                gap: ms(10),
+              }}
+            >
+              <MaterialCommunityIcons
+                name="calendar-month"
+                size={20}
+                color="#FEFEFE"
+              />
+              <View
+                className="flex flex-row items-center "
+                style={{ gap: ms(8) }}
+              >
+                <ThemedText
+                  type="pMedium"
+                  style={{ fontSize: ms(10), color: "#FEFEFE" }}
+                >
+                  {item.date1}
+                </ThemedText>
+                <Svg
+                  width="23"
+                  height="9"
+                  viewBox="0 0 23 9"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <Path
+                    d="M22.3536 5.00077C22.5488 4.80551 22.5488 4.48893 22.3536 4.29366L19.1716 1.11168C18.9763 0.916421 18.6597 0.916421 18.4645 1.11168C18.2692 1.30695 18.2692 1.62353 18.4645 1.81879L21.2929 4.64722L18.4645 7.47564C18.2692 7.67091 18.2692 7.98749 18.4645 8.18275C18.6597 8.37801 18.9763 8.37801 19.1716 8.18275L22.3536 5.00077ZM0 5.14722H22V4.14722H0V5.14722Z"
+                    fill="#FEFEFE"
+                  />
+                </Svg>
+                <ThemedText
+                  type="pMedium"
+                  style={{ fontSize: ms(10), color: "#FEFEFE" }}
+                >
+                  {item.date2}
+                </ThemedText>
+              </View>
+            </View>
+            <View
+              className=""
+              style={{
+                paddingInline: ms(14),
+                paddingBlock: ms(4),
+                borderRadius: ms(12),
+                backgroundColor: item.statusColor,
+              }}
+            >
+              <ThemedText
+                type="pMedium"
+                style={{ fontSize: ms(8), color: "#FFFFFF" }}
+              >
+                {item.status}
+              </ThemedText>
+            </View>
+          </View>
+        </View>
+      </View>
+    </View>
+  );
+
   const Card = ({ item }) => (
     <View style={{ width: ms(250) }}>
       <View className="flex flex-row justify-between ">
         <Svg
-          width="165"
-          height="31"
+          width="163"
+          height="30"
           className="absolute z-10"
-          viewBox="0 0 165 31"
+          viewBox="0 0 163 30"
           fill="none"
         >
           <Path
@@ -464,7 +832,8 @@ export default function TabTwoScreen() {
       <Pressable
         className="relative w-full -z-10"
         ref={touchableRef}
-        onPress={() =>
+        onPress={() => {
+          setIsModalLoading(true);
           openPopup(
             item.bgColor,
             item.title,
@@ -474,8 +843,8 @@ export default function TabTwoScreen() {
             item.textColor,
             item.subTextColor,
             item.ellipseColor
-          )
-        }
+          );
+        }}
       >
         <View
           className="relative w-full -z-10"
@@ -578,6 +947,23 @@ export default function TabTwoScreen() {
 
   return (
     <>
+      {isModalLoading && (
+        <View
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 2000, // Higher than modal
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "rgba(0,0,0,0.3)", // Semi-transparent background
+          }}
+        >
+          <LoadingOverlay visible={isModalLoading} />
+        </View>
+      )}
       {isModalVisible && (
         <View
           style={{
@@ -590,7 +976,13 @@ export default function TabTwoScreen() {
             display: isModalVisible ? "flex" : "none", // Show/hide using display
           }}
         >
-          <ModalContent popupData={memoizedPopupData} onClose={closePopup} />
+          <ModalContent
+            popupData={memoizedPopupData}
+            onClose={() => {
+              setIsModalLoading(false);
+              closePopup();
+            }}
+          />
         </View>
       )}
       <Animated.ScrollView
@@ -757,139 +1149,11 @@ export default function TabTwoScreen() {
               </View>
             </View>
           </View>
-          {[1, 2, 3, 4, 5, 6, 7, 8, 10, 11].map((_, index) => (
-            <View key={index} style={{ marginBottom: ms(16) }}>
-              <View
-                style={{
-                  shadowColor: "#000",
-                  shadowOffset: { width: 0, height: 5 },
-                  shadowOpacity: 0.28,
-                  shadowRadius: 10,
-                  elevation: 4, // Untuk Android
-                  borderRadius: ms(14),
-                }}
-              >
-                <View
-                  className="flex flex-col justify-between "
-                  style={{
-                    width: "100%",
-                    backgroundColor: "#FBFBFB",
-
-                    borderRadius: ms(14),
-                  }}
-                >
-                  <View
-                    className="flex flex-row items-center justify-between"
-                    style={{
-                      marginTop: ms(18),
-                      marginInline: ms(18),
-                      marginBottom: ms(18),
-                    }}
-                  >
-                    <View>
-                      <ThemedText type="mBold" style={{ fontSize: ms(14) }}>
-                        Kerjakan buku halaman 12 ba...
-                      </ThemedText>
-                      <ThemedText
-                        type="pMedium"
-                        className="italic "
-                        style={{
-                          fontSize: ms(12),
-                          lineHeight: ms(15),
-                          color: "#A9A9A9",
-                        }}
-                      >
-                        Matematika
-                      </ThemedText>
-                    </View>
-                    <Svg
-                      width="15"
-                      height="15"
-                      viewBox="0 0 15 15"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <Path
-                        d="M1.86157 15L9.375 7.5L1.86157 0L0 1.85824L5.65186 7.5L0 13.1418L1.86157 15Z"
-                        fill="#1E1E1E"
-                      />
-                      <Path
-                        d="M7.48657 15L15 7.5L7.48657 0L5.625 1.85824L11.2769 7.5L5.625 13.1418L7.48657 15Z"
-                        fill="#1E1E1E"
-                      />
-                    </Svg>
-                  </View>
-                  <View
-                    className="bg-[#493B64] flex flex-row items-center justify-between "
-                    style={{
-                      borderBottomLeftRadius: ms(12),
-                      borderBottomRightRadius: ms(12),
-                      paddingInline: ms(20),
-                      paddingBlock: ms(10),
-                    }}
-                  >
-                    <View
-                      className="flex flex-row items-center"
-                      style={{
-                        gap: ms(10),
-                      }}
-                    >
-                      <MaterialCommunityIcons
-                        name="calendar-month"
-                        size={20}
-                        color="#FEFEFE"
-                      />
-                      <View
-                        className="flex flex-row items-center "
-                        style={{ gap: ms(8) }}
-                      >
-                        <ThemedText
-                          type="pMedium"
-                          style={{ fontSize: ms(10), color: "#FEFEFE" }}
-                        >
-                          5/10/24
-                        </ThemedText>
-                        <Svg
-                          width="23"
-                          height="9"
-                          viewBox="0 0 23 9"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <Path
-                            d="M22.3536 5.00077C22.5488 4.80551 22.5488 4.48893 22.3536 4.29366L19.1716 1.11168C18.9763 0.916421 18.6597 0.916421 18.4645 1.11168C18.2692 1.30695 18.2692 1.62353 18.4645 1.81879L21.2929 4.64722L18.4645 7.47564C18.2692 7.67091 18.2692 7.98749 18.4645 8.18275C18.6597 8.37801 18.9763 8.37801 19.1716 8.18275L22.3536 5.00077ZM0 5.14722H22V4.14722H0V5.14722Z"
-                            fill="#FEFEFE"
-                          />
-                        </Svg>
-                        <ThemedText
-                          type="pMedium"
-                          style={{ fontSize: ms(10), color: "#FEFEFE" }}
-                        >
-                          10/10/24
-                        </ThemedText>
-                      </View>
-                    </View>
-                    <View
-                      className=""
-                      style={{
-                        paddingInline: ms(14),
-                        paddingBlock: ms(4),
-                        borderRadius: ms(12),
-                        backgroundColor: "#3E354F",
-                      }}
-                    >
-                      <ThemedText
-                        type="pMedium"
-                        style={{ fontSize: ms(8), color: "#FFFFFF" }}
-                      >
-                        Unfinished
-                      </ThemedText>
-                    </View>
-                  </View>
-                </View>
-              </View>
-            </View>
-          ))}
+          <View style={{ paddingBottom: ms(50) }}>
+            {assignData.map((item) => (
+              <AssignCard key={item.id} item={item} />
+            ))}
+          </View>
         </Animated.View>
       </Animated.ScrollView>
     </>
