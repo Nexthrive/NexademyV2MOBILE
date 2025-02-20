@@ -131,10 +131,16 @@ const SubjectCard = ({ item }) => (
           }}
         >
           <View>
-            <ThemedText type="mBold" style={{ fontSize: ms(14) }}>
+            <ThemedText
+              allowFontScaling={false}
+              type="mBold"
+              style={{ fontSize: ms(14) }}
+              maxFontSizeMultiplier={1.1}
+            >
               {item.title}
             </ThemedText>
             <ThemedText
+              allowFontScaling={false}
               type="pMedium"
               className="italic "
               style={{
@@ -142,6 +148,7 @@ const SubjectCard = ({ item }) => (
                 lineHeight: ms(15),
                 color: "#A9A9A9",
               }}
+              maxFontSizeMultiplier={1.1}
             >
               {item.description}
             </ThemedText>
@@ -189,8 +196,10 @@ const SubjectCard = ({ item }) => (
               style={{ gap: ms(8) }}
             >
               <ThemedText
+                allowFontScaling={false}
                 type="pMedium"
                 style={{ fontSize: ms(10), color: "#FEFEFE" }}
+                maxFontSizeMultiplier={1.1}
               >
                 {item.date1} | {item.date2}
               </ThemedText>
@@ -208,8 +217,10 @@ const SubjectCard = ({ item }) => (
                 }}
               >
                 <ThemedText
+                  allowFontScaling={false}
                   type="pMedium"
                   style={{ fontSize: ms(8), color: "#FFFFFF" }}
+                  maxFontSizeMultiplier={1.1}
                 >
                   {item.grade}
                 </ThemedText>
@@ -226,8 +237,10 @@ const SubjectCard = ({ item }) => (
               }}
             >
               <ThemedText
+                allowFontScaling={false}
                 type="pMedium"
                 style={{ fontSize: ms(8), color: "#FFFFFF" }}
+                maxFontSizeMultiplier={1.1}
               >
                 {item.status}
               </ThemedText>
@@ -299,6 +312,7 @@ const ModalContent = React.memo(({ popupData, onClose }) => {
               fontFamily: "Montserrat-SemiBold",
               color: popupData.textColor,
             }}
+            maxFontSizeMultiplier={1.1}
           >
             {popupData.title}
           </MotiText>
@@ -312,7 +326,7 @@ const ModalContent = React.memo(({ popupData, onClose }) => {
               borderRadius: ms(8),
             }}
           >
-            <Text style={{ color: "#000" }}>
+            <Text style={{ color: "#000" }} maxFontSizeMultiplier={1.1}>
               <MaterialCommunityIcons name="arrow-left" size={ms(20)} />
             </Text>
           </TouchableOpacity>
@@ -326,6 +340,7 @@ const ModalContent = React.memo(({ popupData, onClose }) => {
             marginTop: ms(8),
             fontSize: ms(12),
           }}
+          maxFontSizeMultiplier={1.1}
         >
           {popupData.description}
         </MotiText>
@@ -368,6 +383,7 @@ const ModalContent = React.memo(({ popupData, onClose }) => {
             color: popupData.textColor,
             fontSize: ms(10),
           }}
+          maxFontSizeMultiplier={1.1}
         >
           {popupData.teacher}
         </MotiText>
@@ -657,10 +673,15 @@ export default function TabTwoScreen() {
             }}
           >
             <View>
-              <ThemedText type="mBold" style={{ fontSize: ms(14) }}>
+              <ThemedText
+                allowFontScaling={false}
+                type="mBold"
+                style={{ fontSize: ms(14) }}
+              >
                 {item.title}
               </ThemedText>
               <ThemedText
+                allowFontScaling={false}
                 type="pMedium"
                 className="italic "
                 style={{
@@ -715,6 +736,7 @@ export default function TabTwoScreen() {
                 style={{ gap: ms(8) }}
               >
                 <ThemedText
+                  allowFontScaling={false}
                   type="pMedium"
                   style={{ fontSize: ms(10), color: "#FEFEFE" }}
                 >
@@ -733,8 +755,10 @@ export default function TabTwoScreen() {
                   />
                 </Svg>
                 <ThemedText
+                  allowFontScaling={false}
                   type="pMedium"
                   style={{ fontSize: ms(10), color: "#FEFEFE" }}
+                  maxFontSizeMultiplier={1.1}
                 >
                   {item.date2}
                 </ThemedText>
@@ -750,8 +774,10 @@ export default function TabTwoScreen() {
               }}
             >
               <ThemedText
+                allowFontScaling={false}
                 type="pMedium"
-                style={{ fontSize: ms(8), color: "#FFFFFF" }}
+                style={{ fontSize: ms(8), height: mvs(11), color: "#FFFFFF" }}
+                maxFontSizeMultiplier={1.1}
               >
                 {item.status}
               </ThemedText>
@@ -788,9 +814,11 @@ export default function TabTwoScreen() {
             }}
           >
             <ThemedText
+              allowFontScaling={false}
               type="pMedium"
               className="flex gap-5 "
               style={{ fontSize: ms(8), height: ms(12) }}
+              maxFontSizeMultiplier={1.1}
             >
               View
             </ThemedText>
@@ -860,19 +888,23 @@ export default function TabTwoScreen() {
         >
           <View style={{ marginTop: ms(5) }}>
             <ThemedText
+              allowFontScaling={false}
               type="mSemiBold"
               className="text-white"
               style={{ fontSize: ms(20), color: item.textColor }}
+              maxFontSizeMultiplier={1.1}
             >
               {item.title}
             </ThemedText>
             <ThemedText
+              allowFontScaling={false}
               className="text-[#B5B5B5]"
               style={{
                 fontSize: ms(12),
                 marginBottom: ms(5),
                 color: item.subTextColor,
               }}
+              maxFontSizeMultiplier={1.1}
             >
               {item.description}
             </ThemedText>
@@ -932,8 +964,10 @@ export default function TabTwoScreen() {
                 />
               </View>
               <ThemedText
+                allowFontScaling={false}
                 className="italic text-white"
                 style={{ fontSize: ms(10), color: item.textColor }}
+                maxFontSizeMultiplier={1.1}
               >
                 {item.teacher}
               </ThemedText>
@@ -997,48 +1031,87 @@ export default function TabTwoScreen() {
       >
         <View className="flex flex-col">
           <View
-            style={{ marginTop: ms(60), marginInline: ms(20), width: ms(200) }}
+            style={{
+              marginTop: ms(60),
+              marginBottom: ms(10),
+              marginInline: ms(20),
+              width: ms(220),
+            }}
           >
-            <ThemedText type="mBold">
-              <View
-                style={{
-                  borderBottomWidth: ms(3),
-                  height: mvs(30),
-                  borderBottomColor: "#3b6064",
-                }}
-              >
-                <ThemedText type="mBold" style={{ fontSize: ms(24) }}>
-                  Assi
-                </ThemedText>
+            <ThemedText
+              allowFontScaling={false}
+              type="mBold"
+              style={{ fontSize: ms(24), lineHeight: ms(30) }}
+              maxFontSizeMultiplier={1.1}
+            >
+              <View style={{ flexDirection: "row", alignItems: "baseline" }}>
+                {/* Assign with underline */}
+                <View
+                  style={{
+                    borderBottomWidth: ms(3),
+                    borderBottomColor: "#3b6064",
+                  }}
+                >
+                  <Text
+                    style={{
+                      height: vs(30),
+                      fontSize: s(28),
+                      letterSpacing: s(-2),
+
+                      fontFamily: "Montserrat",
+                    }}
+                  >
+                    Assi
+                  </Text>
+                </View>
+
+                {/* Isolated "g" without underline */}
+                <Text
+                  style={{
+                    height: vs(34),
+                    letterSpacing: s(-2),
+
+                    fontSize: s(28),
+                    fontFamily: "Montserrat",
+                  }}
+                >
+                  g
+                </Text>
+
+                {/* nment's with underline */}
+                <View
+                  style={{
+                    borderBottomWidth: ms(3),
+                    borderBottomColor: "#3b6064",
+                  }}
+                >
+                  <Text
+                    style={{
+                      height: vs(30),
+                      fontSize: s(28),
+                      letterSpacing: s(-2),
+                      fontFamily: "Montserrat",
+                    }}
+                  >
+                    nment's
+                  </Text>
+                </View>
               </View>
 
-              <View
+              {/* Archive (no underline) */}
+              <Text
                 style={{
-                  borderBottomWidth: ms(0),
-                  height: mvs(30),
-                  borderBottomColor: "transparent",
+                  height: ms(28),
+                  fontSize: ms(28),
+                  letterSpacing: ms(-2),
                 }}
               >
-                <ThemedText type="mBold" style={{ fontSize: ms(24) }}>
-                  g
-                </ThemedText>
-              </View>
-              <View
-                style={{
-                  borderBottomWidth: ms(3),
-                  height: mvs(30),
-                  borderBottomColor: "#3b6064",
-                }}
-              >
-                <ThemedText type="mBold" style={{ fontSize: ms(24) }}>
-                  nment's
-                </ThemedText>
-              </View>
-              <ThemedText type="mBold" style={{ fontSize: ms(24) }}>
+                {" "}
                 Archive
-              </ThemedText>
+              </Text>
             </ThemedText>
           </View>
+
           <View style={{ marginLeft: ms(20) }}>
             <ScrollView
               horizontal={true}
@@ -1088,7 +1161,12 @@ export default function TabTwoScreen() {
             className="flex flex-row items-center justify-between"
             style={{ marginBottom: ms(18) }}
           >
-            <ThemedText type="mSemiBold" style={{ fontSize: ms(22) }}>
+            <ThemedText
+              allowFontScaling={false}
+              type="mSemiBold"
+              style={{ fontSize: ms(22), letterSpacing: s(-1) }}
+              maxFontSizeMultiplier={1.1}
+            >
               All Task's
             </ThemedText>
             <View className="flex flex-row " style={{ gap: ms(18) }}>
