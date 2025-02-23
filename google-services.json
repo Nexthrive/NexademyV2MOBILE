@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "80715541290",
+    "project_id": "nexademy-a410e",
+    "storage_bucket": "nexademy-a410e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:80715541290:android:a8488e6b8dbd067f360c53",
+        "android_client_info": {
+          "package_name": "com.nexthrivecompany.nexademy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBPS7EG4dd1vu5qvOHR_p2uBNdg7qjcggE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

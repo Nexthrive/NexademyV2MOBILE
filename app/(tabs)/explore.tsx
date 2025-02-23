@@ -1151,10 +1151,15 @@ export default function TabTwoScreen() {
         <Animated.View
           style={{
             paddingInline: ms(18),
+            transform: [{ translateY: translateYY }],
             position: "relative",
-            transform: [{ translateY: translateYY }], // Use translateY here as well
-
-            zIndex: 2,
+            zIndex: 100,
+            backgroundColor: "white",
+            elevation: 10,
+            shadowColor: "transparent",
+            shadowOpacity: 0,
+            shadowOffset: { width: 0, height: -10 },
+            shadowRadius: 0,
           }}
         >
           <View
