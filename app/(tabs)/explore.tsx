@@ -9,8 +9,9 @@ import {
   Modal,
   Pressable,
 } from "react-native";
-import { MotiView, MotiText } from "moti";
 
+import { MotiView, MotiText } from "moti";
+import { TriangleColorPicker, toHsv, fromHsv } from "react-native-color-picker";
 import { Shadow } from "react-native-shadow-2";
 import { Feather } from "@expo/vector-icons"; // Import Expo Icons
 import { useState, useMemo, useCallback } from "react";
@@ -22,7 +23,7 @@ import { ScaledSheet, ms, s, vs, mvs } from "react-native-size-matters";
 import { useStoreRootState } from "expo-router/build/global-state/router-store";
 import Svg, { Path, G, Ellipse } from "react-native-svg";
 import { SafeAreaView } from "react-native-safe-area-context";
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import LoadingOverlay from "@/components/LoadingOverlay";
 import {
@@ -37,6 +38,7 @@ const statusColor = {
   due: "#C99F2C",
   overdue: "#8C3838",
 };
+
 const subjectData = [
   {
     id: "1",
@@ -114,7 +116,7 @@ const SubjectCard = ({ item }) => (
       }}
     >
       <View
-        className="flex flex-col justify-between "
+        className="flex flex-col justify-between"
         style={{
           width: "100%",
           backgroundColor: "#FBFBFB",
@@ -123,7 +125,7 @@ const SubjectCard = ({ item }) => (
         }}
       >
         <View
-          className="flex flex-row items-center justify-between"
+          className="flex flex-row justify-between items-center"
           style={{
             marginTop: ms(18),
             marginInline: ms(18),
@@ -142,7 +144,7 @@ const SubjectCard = ({ item }) => (
             <ThemedText
               allowFontScaling={false}
               type="pMedium"
-              className="italic "
+              className="italic"
               style={{
                 fontSize: ms(12),
                 lineHeight: ms(15),
@@ -171,7 +173,7 @@ const SubjectCard = ({ item }) => (
           </Svg>
         </View>
         <View
-          className="flex flex-row items-center justify-between "
+          className="flex flex-row justify-between items-center"
           style={{
             backgroundColor: item.stripColor,
             borderBottomLeftRadius: ms(12),
@@ -191,10 +193,7 @@ const SubjectCard = ({ item }) => (
               size={20}
               color="#FEFEFE"
             />
-            <View
-              className="flex flex-row items-center "
-              style={{ gap: ms(8) }}
-            >
+            <View className="flex flex-row items-center" style={{ gap: ms(8) }}>
               <ThemedText
                 allowFontScaling={false}
                 type="pMedium"
@@ -205,7 +204,7 @@ const SubjectCard = ({ item }) => (
               </ThemedText>
             </View>
           </View>
-          <View className="flex flex-row items-center " style={{ gap: ms(6) }}>
+          <View className="flex flex-row items-center" style={{ gap: ms(6) }}>
             {item.grade && (
               <View
                 className=""
@@ -298,10 +297,10 @@ const ModalContent = React.memo(({ popupData, onClose }) => {
         </Svg>
       </View> */}
       <View
-        className="flex flex-col "
+        className="flex flex-col"
         style={{ position: "relative", zIndex: 2 }}
       >
-        <View className="flex flex-row items-center justify-between">
+        <View className="flex flex-row justify-between items-center">
           <MotiText
             from={{ opacity: 0, translateY: -20 }}
             animate={{ opacity: 1, translateY: 0 }}
@@ -415,7 +414,7 @@ const ModalContent = React.memo(({ popupData, onClose }) => {
         from={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 400 }}
-        className="flex flex-row items-center justify-center bg-white "
+        className="flex flex-row justify-center items-center bg-white"
         style={{
           width: "74%",
           padding: ms(10),
@@ -503,10 +502,183 @@ const ModalContent = React.memo(({ popupData, onClose }) => {
   );
 });
 export default function TabTwoScreen() {
+  const datas = [
+    {
+      id: "1",
+      title: "Matematika",
+      description: "24 Total task's",
+      teacher: `Aldi "Azhar" Yusron, S.Pd.`,
+      image: require("../../assets/images/face.jpg"),
+      bgColor: "#493B64",
+      dotsColor: "#9183AC",
+      textColor: "#FFFFFF",
+      subTextColor: "#B5B5B5",
+      ellipseColor: "#382A56",
+    },
+    {
+      id: "2",
+      title: "PPKN",
+      description: "12 Total task's",
+      teacher: `Aldi "Azhar" Yusron, S.Pd.`,
+      image: require("../../assets/images/face.jpg"),
+      bgColor: "#643B3B",
+      dotsColor: "#AA8181",
+      textColor: "#FFFFFF",
+      subTextColor: "#C6C6C6",
+      ellipseColor: "#4A2323",
+    },
+  ];
+  const [subjects, setSubjects] = useState(datas);
+  useEffect(() => {
+    console.log("Subjects state updated:", subjects);
+  }, [subjects]);
+  const [showColorPicker, setShowColorPicker] = useState(false);
+  const [selectedSubjectId, setSelectedSubjectId] = useState(null);
+  const [selectedColor, setSelectedColor] = useState("#493B64");
+  const [showResetConfirmation, setShowResetConfirmation] = useState(false);
   const [isFlatListScrolling, setIsFlatListScrolling] = useState(false);
   const scrollY = useRef(new Animated.Value(0)).current;
   const [isContentScrolling, setIsContentScrolling] = useState(false);
   const contentScrollRef = useRef<ScrollView>(null);
+  const resetSubjectToDefault = useCallback(
+    (id) => {
+      setSubjects((prevSubjects) => {
+        const defaultSubject = datas.find((subject) => subject.id === id);
+
+        if (!defaultSubject) {
+          console.error("Default subject not found for ID:", id);
+          return prevSubjects;
+        }
+
+        const updatedSubjects = prevSubjects.map((subject) => {
+          if (subject.id === id) {
+            console.log("Resetting subject to default:", defaultSubject.title);
+            return { ...defaultSubject };
+          }
+          return subject;
+        });
+
+        // Save to AsyncStorage
+        AsyncStorage.setItem(
+          "subjectColors",
+          JSON.stringify(updatedSubjects)
+        ).catch((error) => console.error("Error saving colors:", error));
+
+        return updatedSubjects;
+      });
+
+      // Close confirmation and reset selection
+      setShowResetConfirmation(false);
+      setSelectedSubjectId(null);
+    },
+    [datas]
+  );
+
+  const updateSubjectColors = useCallback(
+    (id, newColor) => {
+      // Close active dropdown if any
+      setActiveDropdownId(null);
+
+      console.log("Updating color for subject ID:", id, "to", newColor);
+
+      setSubjects((prevSubjects) => {
+        // Check if prevSubjects is undefined or not an array
+        if (
+          !prevSubjects ||
+          !Array.isArray(prevSubjects) ||
+          prevSubjects.length === 0
+        ) {
+          console.error("Previous subjects is undefined or not an array");
+          // Use the original datas array as fallback
+          prevSubjects = [...datas];
+        }
+
+        const updatedSubjects = prevSubjects.map((subject) => {
+          if (subject.id === id) {
+            // Calculate complementary colors based on the main color
+            const darkerColor = adjustColor(newColor, -20); // For ellipseColor
+            const lighterColor = adjustColor(newColor, 20); // For dotsColor
+
+            console.log("Updating subject:", subject.title);
+
+            return {
+              ...subject,
+              bgColor: newColor,
+              dotsColor: lighterColor,
+              ellipseColor: darkerColor,
+            };
+          }
+          return subject;
+        });
+
+        console.log("Updated subjects:", updatedSubjects);
+
+        // Save to AsyncStorage
+        AsyncStorage.setItem(
+          "subjectColors",
+          JSON.stringify(updatedSubjects)
+        ).catch((error) => console.error("Error saving colors:", error));
+
+        return updatedSubjects;
+      });
+
+      // Close color picker and reset selection
+      setShowColorPicker(false);
+      setSelectedSubjectId(null);
+    },
+    [datas]
+  );
+
+  // Helper function to adjust color brightness
+  const adjustColor = (hex, percent) => {
+    // Convert hex to RGB
+    let r = parseInt(hex.substring(1, 3), 16);
+    let g = parseInt(hex.substring(3, 5), 16);
+    let b = parseInt(hex.substring(5, 7), 16);
+
+    // Adjust brightness
+    r = Math.min(255, Math.max(0, r + percent));
+    g = Math.min(255, Math.max(0, g + percent));
+    b = Math.min(255, Math.max(0, b + percent));
+
+    // Convert back to hex
+    return `#${r.toString(16).padStart(2, "0")}${g
+      .toString(16)
+      .padStart(2, "0")}${b.toString(16).padStart(2, "0")}`;
+  };
+  useEffect(() => {
+    const loadSavedColors = async () => {
+      try {
+        const savedSubjects = await AsyncStorage.getItem("subjectColors");
+        console.log("Loaded from AsyncStorage:", savedSubjects);
+
+        // Only update state if savedSubjects exists AND is not an empty array
+        if (savedSubjects && savedSubjects !== "[]") {
+          const parsedSubjects = JSON.parse(savedSubjects);
+          console.log("Parsed subjects:", parsedSubjects);
+
+          // Check if parsedSubjects has actual items
+          if (
+            parsedSubjects &&
+            Array.isArray(parsedSubjects) &&
+            parsedSubjects.length > 0
+          ) {
+            setSubjects(parsedSubjects);
+          } else {
+            console.log(
+              "Using default subjects data instead of empty saved data"
+            );
+          }
+        } else {
+          console.log("No saved subjects found, using default data");
+        }
+      } catch (error) {
+        console.error("Error loading saved colors:", error);
+      }
+    };
+
+    loadSavedColors();
+  }, []);
   const translateY = scrollY.interpolate({
     inputRange: [0, 620], // Adjust the range based on how far you want the effect
     outputRange: [ms(350), ms(200)], // Start at 260 and move to 100
@@ -570,32 +742,6 @@ export default function TabTwoScreen() {
     },
   ];
 
-  const datas = [
-    {
-      id: "1",
-      title: "Matematika",
-      description: "24 Total task's",
-      teacher: `Aldi "Azhar" Yusron, S.Pd.`,
-      image: require("../../assets/images/face.jpg"),
-      bgColor: "#493B64",
-      dotsColor: "#9183AC",
-      textColor: "#FFFFFF",
-      subTextColor: "#B5B5B5",
-      ellipseColor: "#382A56",
-    },
-    {
-      id: "2",
-      title: "PPKN",
-      description: "12 Total task's",
-      teacher: `Aldi "Azhar" Yusron, S.Pd.`,
-      image: require("../../assets/images/face.jpg"),
-      bgColor: "#643B3B",
-      dotsColor: "#AA8181",
-      textColor: "#FFFFFF",
-      subTextColor: "#C6C6C6",
-      ellipseColor: "#4A2323",
-    },
-  ];
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isModalLoading, setIsModalLoading] = useState(false);
 
@@ -656,7 +802,7 @@ export default function TabTwoScreen() {
         }}
       >
         <View
-          className="flex flex-col justify-between "
+          className="flex flex-col justify-between"
           style={{
             width: "100%",
             backgroundColor: "#FBFBFB",
@@ -665,7 +811,7 @@ export default function TabTwoScreen() {
           }}
         >
           <View
-            className="flex flex-row items-center justify-between"
+            className="flex flex-row justify-between items-center"
             style={{
               marginTop: ms(18),
               marginInline: ms(18),
@@ -683,7 +829,7 @@ export default function TabTwoScreen() {
               <ThemedText
                 allowFontScaling={false}
                 type="pMedium"
-                className="italic "
+                className="italic"
                 style={{
                   fontSize: ms(12),
                   lineHeight: ms(15),
@@ -711,7 +857,7 @@ export default function TabTwoScreen() {
             </Svg>
           </View>
           <View
-            className="flex flex-row items-center justify-between "
+            className="flex flex-row justify-between items-center"
             style={{
               backgroundColor: item.stripColor,
               borderBottomLeftRadius: ms(12),
@@ -732,7 +878,7 @@ export default function TabTwoScreen() {
                 color="#FEFEFE"
               />
               <View
-                className="flex flex-row items-center "
+                className="flex flex-row items-center"
                 style={{ gap: ms(8) }}
               >
                 <ThemedText
@@ -787,10 +933,10 @@ export default function TabTwoScreen() {
       </View>
     </View>
   );
-
+  const [activeDropdownId, setActiveDropdownId] = useState(null);
   const Card = ({ item }) => (
     <View style={{ width: ms(250) }}>
-      <View className="flex flex-row justify-between ">
+      <View className="flex flex-row justify-between">
         <Svg
           width="163"
           height="30"
@@ -816,7 +962,7 @@ export default function TabTwoScreen() {
             <ThemedText
               allowFontScaling={false}
               type="pMedium"
-              className="flex gap-5 "
+              className="flex gap-5"
               style={{ fontSize: ms(8), height: ms(12) }}
               maxFontSizeMultiplier={1.1}
             >
@@ -842,19 +988,94 @@ export default function TabTwoScreen() {
         </Svg>
 
         <View
-          className="absolute right-0 flex flex-row items-center justify-center"
+          className="flex absolute right-0 flex-row justify-center items-center"
           style={{
             paddingInline: ms(4),
             paddingBlock: ms(2),
             borderRadius: ms(8),
             backgroundColor: item.dotsColor,
+            zIndex: 20,
           }}
         >
-          <MaterialCommunityIcons
-            name="dots-horizontal"
-            size={20}
-            color="black"
-          />
+          <TouchableOpacity
+            onPress={() => {
+              // Toggle dropdown for this specific item
+              if (activeDropdownId === item.id) {
+                setActiveDropdownId(null); // Close if already open
+              } else {
+                setActiveDropdownId(item.id); // Open this dropdown
+              }
+            }}
+            style={{ padding: ms(2) }}
+          >
+            <MaterialCommunityIcons
+              name="dots-horizontal"
+              size={20}
+              color="black"
+            />
+          </TouchableOpacity>
+          {activeDropdownId === item.id && (
+            <View
+              style={{
+                position: "absolute",
+                top: ms(30),
+                right: 0,
+                backgroundColor: "#FFFFFF",
+                borderRadius: ms(8),
+                shadowColor: "#000",
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.25,
+                shadowRadius: 3.84,
+                elevation: 5,
+                width: ms(120),
+                zIndex: 30,
+              }}
+            >
+              <TouchableOpacity
+                style={{
+                  paddingVertical: ms(8),
+                  paddingHorizontal: ms(12),
+                  borderBottomWidth: 1,
+                  borderBottomColor: "#F0F0F0",
+                }}
+                onPress={() => {
+                  setActiveDropdownId(null);
+                  // Open color picker for this subject
+                  setSelectedSubjectId(item.id);
+                  setSelectedColor(item.bgColor);
+                  setShowColorPicker(true);
+                }}
+              >
+                <ThemedText
+                  allowFontScaling={false}
+                  type="pMedium"
+                  style={{ fontSize: ms(12) }}
+                >
+                  Change Colors
+                </ThemedText>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  paddingVertical: ms(8),
+                  paddingHorizontal: ms(12),
+                }}
+                onPress={() => {
+                  setActiveDropdownId(null);
+                  // Show confirmation popup
+                  setSelectedSubjectId(item.id);
+                  setShowResetConfirmation(true);
+                }}
+              >
+                <ThemedText
+                  allowFontScaling={false}
+                  type="pMedium"
+                  style={{ fontSize: ms(12) }}
+                >
+                  Reset to Default
+                </ThemedText>
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
       </View>
       <Pressable
@@ -939,7 +1160,7 @@ export default function TabTwoScreen() {
               )}
             </Svg>
             <View
-              className="flex flex-row items-center "
+              className="flex flex-row items-center"
               style={{ gap: ms(10) }}
             >
               <View
@@ -981,6 +1202,226 @@ export default function TabTwoScreen() {
 
   return (
     <>
+      <Modal
+        visible={showResetConfirmation}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setShowResetConfirmation(false)}
+      >
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "rgba(0,0,0,0.5)",
+            padding: ms(20),
+          }}
+        >
+          <View
+            style={{
+              width: "90%",
+              backgroundColor: "white",
+              borderRadius: ms(12),
+              padding: ms(20),
+              alignItems: "center",
+            }}
+          >
+            <ThemedText
+              allowFontScaling={false}
+              type="mSemiBold"
+              style={{ fontSize: ms(18), marginBottom: ms(15) }}
+            >
+              Reset to Default?
+            </ThemedText>
+
+            <ThemedText
+              allowFontScaling={false}
+              style={{ textAlign: "center", marginBottom: ms(20) }}
+            >
+              This will reset the subject colors to their default values. This
+              action cannot be undone.
+            </ThemedText>
+
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                width: "100%",
+              }}
+            >
+              <TouchableOpacity
+                style={{
+                  padding: ms(10),
+                  borderRadius: ms(8),
+                  backgroundColor: "#f0f0f0",
+                  width: "45%",
+                  alignItems: "center",
+                }}
+                onPress={() => setShowResetConfirmation(false)}
+              >
+                <ThemedText type="pMedium">Cancel</ThemedText>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={{
+                  padding: ms(10),
+                  borderRadius: ms(8),
+                  backgroundColor: "#FF6B6B",
+                  width: "45%",
+                  alignItems: "center",
+                }}
+                onPress={() => resetSubjectToDefault(selectedSubjectId)}
+              >
+                <ThemedText type="pMedium" style={{ color: "#FFFFFF" }}>
+                  Reset
+                </ThemedText>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+      <Modal
+        visible={showColorPicker}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setShowColorPicker(false)}
+      >
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "rgba(0,0,0,0.5)",
+            padding: ms(20),
+          }}
+        >
+          <View
+            style={{
+              width: "90%",
+              backgroundColor: "white",
+              borderRadius: ms(12),
+              padding: ms(20),
+              alignItems: "center",
+            }}
+          >
+            <ThemedText
+              allowFontScaling={false}
+              type="mSemiBold"
+              style={{ fontSize: ms(18), marginBottom: ms(15) }}
+            >
+              Choose a Color
+            </ThemedText>
+
+            {/* Optimized color picker */}
+            <View style={{ width: "100%", marginBottom: ms(15) }}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  flexWrap: "wrap",
+                  justifyContent: "center",
+                  gap: ms(10),
+                  marginBottom: ms(10),
+                }}
+              >
+                {[
+                  "#493B64",
+                  "#643B3B",
+                  "#3B6064",
+                  "#643B5F",
+                  "#3B6440",
+                  "#644B3B",
+                  "#3B4064",
+                  "#5F3B64",
+                  "#64583B",
+                  "#3B5764",
+                  "#64393B",
+                  "#3B6450",
+                  "#4F3B64",
+                  "#64483B",
+                  "#3B4564",
+                ].map((color) => (
+                  <TouchableOpacity
+                    key={color}
+                    style={{
+                      width: ms(40),
+                      height: ms(40),
+                      backgroundColor: color,
+                      borderRadius: ms(8),
+                      borderWidth: selectedColor === color ? ms(3) : 0,
+                      borderColor: "#000",
+                    }}
+                    onPress={() => setSelectedColor(color)}
+                  />
+                ))}
+              </View>
+
+              {/* Show selected color preview */}
+              <View
+                style={{
+                  width: "100%",
+                  height: ms(50),
+                  backgroundColor: selectedColor,
+                  borderRadius: ms(8),
+                  marginTop: ms(10),
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <ThemedText type="pMedium" style={{ color: "#FFFFFF" }}>
+                  Selected Color
+                </ThemedText>
+              </View>
+            </View>
+
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                width: "100%",
+                marginTop: ms(20),
+              }}
+            ></View>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                width: "100%",
+                marginTop: ms(20),
+              }}
+            >
+              <TouchableOpacity
+                style={{
+                  padding: ms(10),
+                  borderRadius: ms(8),
+                  backgroundColor: "#f0f0f0",
+                  width: "45%",
+                  alignItems: "center",
+                }}
+                onPress={() => setShowColorPicker(false)}
+              >
+                <ThemedText type="pMedium">Cancel</ThemedText>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={{
+                  padding: ms(10),
+                  borderRadius: ms(8),
+                  backgroundColor: selectedColor,
+                  width: "45%",
+                  alignItems: "center",
+                }}
+                onPress={() =>
+                  updateSubjectColors(selectedSubjectId, selectedColor)
+                }
+              >
+                <ThemedText type="pMedium" style={{ color: "#FFFFFF" }}>
+                  Apply
+                </ThemedText>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
       {isModalLoading && (
         <View
           style={{
@@ -1121,9 +1562,11 @@ export default function TabTwoScreen() {
                 className="flex flex-row"
                 style={{ paddingRight: ms(20), gap: ms(20) }}
               >
-                {datas.map((item) => (
-                  <Card key={item.id} item={item} />
-                ))}
+                {(subjects && subjects.length > 0 ? subjects : datas).map(
+                  (item) => (
+                    <Card key={item.id} item={item} />
+                  )
+                )}
               </View>
             </ScrollView>
           </View>
@@ -1163,7 +1606,7 @@ export default function TabTwoScreen() {
           }}
         >
           <View
-            className="flex flex-row items-center justify-between"
+            className="flex flex-row justify-between items-center"
             style={{ marginBottom: ms(18) }}
           >
             <ThemedText
@@ -1174,7 +1617,7 @@ export default function TabTwoScreen() {
             >
               All Task's
             </ThemedText>
-            <View className="flex flex-row " style={{ gap: ms(18) }}>
+            <View className="flex flex-row" style={{ gap: ms(18) }}>
               <View
                 style={{
                   width: ms(40),
